@@ -116,6 +116,8 @@ const productoeditado = new Product(
     41
   );
 
+
+//Test del desafio 2  
 const pm = new ProductManager("./info.txt");
 console.log(await pm.getProducts());
 await pm.addProduct(producto1);
@@ -131,6 +133,4 @@ await pm.deleteProduct(2);
 console.log(await pm.getProducts());
 await pm.deleteProduct(2);
 
-// console.log(pm.getProductById(1))
-// console.log(pm.addProduct(new Product("producto prueba", "Este es un producto prueba",200,"Sin imagen", "abc123", 25)));
-// console.log(pm.getProductById(2));
+
