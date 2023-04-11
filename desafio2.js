@@ -73,18 +73,21 @@ class ProductManager {
     await fs.writeFile(this.path, JSON.stringify(products));
     return products
     }
-    return "Not Found";
+    return console.log("Not Found");
   }
 
   async deleteProduct(id) {
     //Leer archivo
     const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
     const index = products.findIndex((el) => el.id == id);
+    if (index !== -1) {
     //Eliminamos el objeto en el array
     products.splice(index, 1);
     //Escribir archivo
     await fs.writeFile(this.path, JSON.stringify(products));
     return products;
+    }
+    return console.log("Not Found");
   }
 }
 
@@ -126,6 +129,7 @@ await pm.deleteProduct(1);
 console.log(await pm.getProducts());
 await pm.deleteProduct(2);
 console.log(await pm.getProducts());
+await pm.deleteProduct(2);
 
 // console.log(pm.getProductById(1))
 // console.log(pm.addProduct(new Product("producto prueba", "Este es un producto prueba",200,"Sin imagen", "abc123", 25)));
