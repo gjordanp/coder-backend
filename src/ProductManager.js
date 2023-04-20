@@ -2,14 +2,16 @@ import { promises as fs } from "fs";
 
 // Desafio 2
 export class Product {
-  constructor(title, description, price, thumbnail, code, stock) {
+  constructor(title,description,thumbnails,price,code,stock,status,category) {
     //constructor
     this.title = title;
     this.description = description;
+    this.thumbnails = thumbnails??[];
     this.price = price;
-    this.thumbnail = thumbnail;
     this.code = code;
     this.stock = stock;
+    this.status = status;
+    this.category = category;
   }
 }
 
@@ -31,15 +33,19 @@ export class ProductManager {
   async addProduct(product) {
     //Leer archivo
     const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
-    product.id = ProductManager.incrementID();
     const index = products.findIndex((el) => el.code == product.code);
     if (index == -1) {
-      products.push(product);
+      let id=ProductManager.incrementID();
+      while(products.some((el) => el.id == id)){ //Si el id ya existe, incrementamos
+        id=ProductManager.incrementID();
+      }
+      products.push({id:id, ...product});
       //Escribir archivo
       await fs.writeFile(this.path, JSON.stringify(products));
-      return products;
+      //return products;
+      return "Producto agregado";
     } else {
-      return "El producto ya existe";
+      return "Un producto con el mismo codigo ya existe";
     }
   }
 
@@ -53,7 +59,7 @@ export class ProductManager {
     //Leer archivo
     const products = JSON.parse(await fs.readFile(this.path, "utf-8"));
     const product = products.find((el) => el.id == id);
-    return product ?? "Not found";
+    return product ?? "Producto no encontrado";
   }
 
   async updateProduct(id, obj) {
@@ -62,17 +68,16 @@ export class ProductManager {
     const index = products.findIndex((el) => el.id == id);
     if (index !== -1) {
     //reemplazamos el objeto en el array
-    products[index].title=obj.title;
-    products[index].description=obj.description;
-    products[index].price=obj.price;
-    products[index].thumbnail=obj.thumbnail;
-    products[index].code=obj.code;
-    products[index].stock=obj.stock;
+    for (const key in obj) {
+      if (obj[key] !== undefined && products[index][key]!== undefined) {
+        products[index][key]=obj[key]
+      }
+    }
     //Escribir archivo
     await fs.writeFile(this.path, JSON.stringify(products));
-    return products
+    return `Producto con id ${id} actualizado`;
     }
-    return console.log("Not Found");
+    return "Producto no encontrado";
   }
 
   async deleteProduct(id) {
@@ -84,36 +89,12 @@ export class ProductManager {
     products.splice(index, 1);
     //Escribir archivo
     await fs.writeFile(this.path, JSON.stringify(products));
-    return products;
+    return `Producto con id ${id} eliminado`;
     }
-    return console.log("Not Found");
+    return "Producto no encontrado";
   }
 }
 
-// const producto1 = new Product(
-//   "Producto1",
-//   "Desc producto 1",
-//   200,
-//   "Sin imagen",
-//   "abc123",
-//   25
-// );
-// const producto2 = new Product(
-//   "Producto2",
-//   "Desc producto 2",
-//   100,
-//   "Sin imagen",
-//   "def456",
-//   15
-// );
-// const productoeditado = new Product(
-//     "ProductoEditado",
-//     "Desc producto editado",
-//     55,
-//     "Sin imagen",
-//     "dkjnhefr",
-//     41
-//   );
 
 
 // //Test del desafio 2  
