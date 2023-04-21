@@ -24,10 +24,19 @@ export class CartManager {
       const products = await pm.getProducts();
       const index = products.findIndex((el) => el.id == parseInt(pid));
       if (index !== -1) {
-        const newproduct = { id: parseInt(pid), quantity: parseInt(quantity) }; //Creamos nuevo producto
-        carts[cartIndex].products.push(newproduct); //Agregamos productos al carrito
-        await fs.writeFile(this.cartPath, JSON.stringify(carts)); //Escribimos al archivo
-        return `Producto ${pid} agregado al carrito ${cid} con ${quantity} unidades`;
+        const newProduct = { id: parseInt(pid), quantity: parseInt(quantity) }; //Creamos nuevo producto
+        const existingProductIndex=carts[cartIndex].products.findIndex((el) => el.id == parseInt(pid)); //Buscamos el producto en el carrito
+        if(existingProductIndex!== -1){
+          carts[cartIndex].products[existingProductIndex].quantity+=parseInt(quantity); //Reemplazamos la cantidad
+          await fs.writeFile(this.cartPath, JSON.stringify(carts)); //Escribimos al archivo
+          return `Producto ${pid} existente en carrito ${cid} aumenta su cantidad en ${quantity} unidades`;
+        }
+        else{
+          carts[cartIndex].products.push(newProduct); //Agregamos productos al carrito
+          await fs.writeFile(this.cartPath, JSON.stringify(carts)); //Escribimos al archivo
+          return `Producto ${pid} agregado al carrito ${cid} con ${quantity} unidades`;
+        }
+
       } else {
         return `El producto ${pid} no existe`;
       }
