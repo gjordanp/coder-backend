@@ -1,0 +1,38 @@
+<form action="" id="formulario">
+  <label for="title">Titulo:</label><br>
+  <input type="text" id="title" name="title" placeholder="Producto" ><br>
+  <label for="description">Descripcion:</label><br>
+  <input type="text" id="description" name="description" placeholder="Descripcion del producto"><br>
+  <label for="thumbnails">Thumbnails:</label><br>
+  <input type="text" id="thumbnails" name="thumbnails" placeholder="[URL1, URL2, URL3]"><br>
+  <label for="price">Precio:</label><br>
+  <input type="text" id="price" name="price" placeholder="2000"><br>
+  <label for="code">Code:</label><br>
+  <input type="text" id="code" name="code" placeholder="abc123"><br>
+  <label for="stock">Stock:</label><br>
+  <input type="text" id="stock" name="stock" placeholder="35"><br>
+  <label for="status">Status:</label><br>
+  <input type="text" id="status" name="status" placeholder="true"><br>
+  <label for="category">Categoria:</label><br>
+  <input type="text" id="category" name="category" placeholder="categoria"><br>
+  <br>
+  <input type="submit" value="Agregar Producto">
+</form>
+
+
+<ul id="product-list">
+    {{#each products}}
+    <li>
+        <p><strong>id:</strong> {{this.id}}</p>
+        <p><strong>title:</strong> {{this.title}}</p>
+        <p><strong>description: </strong>{{this.description}}</p>
+        <p><strong>thumbnails:</strong> {{this.thumbnails}}</p>
+        <p><strong>price:</strong> {{this.price}}</p>
+        <p><strong>code:</strong> {{this.code}}</p>
+        <p><strong>stock:</strong> {{this.stock}}</p>
+        <p><strong>status:</strong> {{this.status}}</p>
+        <p><strong>category:</strong> {{this.category}}</p>
+        <br>
+    </li>
+    {{/each}}
+</ul>

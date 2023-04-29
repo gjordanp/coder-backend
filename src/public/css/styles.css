@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: lightgray;
+    font-family: sans-serif;
+    font-size: 0.8rem;
+}
+/* material UI form */
+form{
+    width: 50%;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: white;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+/* form label */
+label{
+    font-weight: bold;
+}
+/* form input */
+input{
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    margin-bottom: 0.5rem;
+}
+ul{
+    margin:2rem;
+}
+/* form button */
