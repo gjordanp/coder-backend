@@ -51,15 +51,27 @@ const server=app.listen(port, () => {
 const io= new Server(server);
 const newProduct=null;
 
-io.on('connection', (socket)=>{//cuando se establece la conexion envio un mensaje
+io.on('connection', async(socket)=>{//cuando se establece la conexion envio un mensaje
     console.log('Cliente conectado');
+    //Onload
+    const productManager = new ProductManager('./src/products.txt');
+    const onLoadProducts= await productManager.getProducts();
+    socket.emit('server:onloadProducts', onLoadProducts);
+
+    //NewProduct
     socket.on('client:newproduct', async (data) => {
-        const productManager = new ProductManager('./src/products.txt');
         const newProduct = new Product(data.title, data.description, data.thumbnails, data.price, data.code, data.stock, data.status, data.category)
         await productManager.addProduct(newProduct);
         const updatedProducts= await productManager.getProducts();
         socket.emit('server:updatedProducts', updatedProducts);
       })
+
+    //DeleteProduct
+    socket.on('client:deleteProduct', async (id) => {
+        await productManager.deleteProduct(id);
+        const updatedProducts= await productManager.getProducts();
+        socket.emit('server:deleteProduct', updatedProducts);
+    }) 
 }) 
 
 app.use(async(req, res, next) => {
