@@ -49,3 +49,14 @@ button{
     color: white;
     cursor: pointer;
 }
+
+/*find by id */
+#chatDiv{
+    margin: 20px
+}
+#parrafoMensajes{
+    background-color: white;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 5px;
+}

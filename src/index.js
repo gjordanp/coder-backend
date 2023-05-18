@@ -1,5 +1,7 @@
 import {Server} from 'socket.io';
+import 'dotenv/config';
 import express from 'express';
+import mongoose from 'mongoose';
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
 import { __dirname } from './path.js';
@@ -9,10 +11,17 @@ import * as path from 'path';
 
 import { ProductManager, Product } from './ProductManager.js';
 
+//models
+import {productModel} from './models/Products.js';
+import {cartModel} from './models/Cart.js';
+import {messageModel} from './models/Messages.js';
+import { log } from 'console';
+
+
 
 //Configuraciones de Express
 export const app = express();
-const port = 8080;
+const port = process.env.PORT;
 
 
 // //Configuracion de Multer
@@ -38,7 +47,9 @@ app.use(express.urlencoded({ extended: true }));//Permite poder usar Query Strin
 
 
 
-
+mongoose.connect(process.env.URL_MONGODB_ATLAS)
+.then(() => console.log('Conectado a MongoDB Atlas'))
+.catch(error => console.log(error));
 
 
 
@@ -54,42 +65,65 @@ const newProduct=null;
 io.on('connection', async(socket)=>{//cuando se establece la conexion envio un mensaje
     console.log('Cliente conectado');
     //Onload
-    const productManager = new ProductManager('./src/products.txt');
-    const onLoadProducts= await productManager.getProducts();
+
+    //FS
+    // const productManager = new ProductManager('./src/products.txt');
+    // const onLoadProducts= await productManager.getProducts();
+
+    //Mongo
+    const onLoadProducts= await productModel.find(); 
+    //productModel.insertMany(onLoadProducts);
     socket.emit('server:onloadProducts', onLoadProducts);
 
     //NewProduct
     socket.on('client:newproduct', async (data) => {
         const newProduct = new Product(data.title, data.description, data.thumbnails, data.price, data.code, data.stock, data.status, data.category)
-        await productManager.addProduct(newProduct);
-        const updatedProducts= await productManager.getProducts();
+        //FS
+        // await productManager.addProduct(newProduct);
+        // const updatedProducts= await productManager.getProducts();
+
+        //Mongo
+        await productModel.create(newProduct);
+        const updatedProducts= await productModel.find(); 
         socket.emit('server:updatedProducts', updatedProducts);
       })
 
     //DeleteProduct
     socket.on('client:deleteProduct', async (id) => {
-        await productManager.deleteProduct(id);
-        const updatedProducts= await productManager.getProducts();
+        //FS
+        // await productManager.deleteProduct(id);
+        // const updatedProducts= await productManager.getProducts();
+        
+        //Mongo
+        await productModel.deleteOne({_id: id});
+        const updatedProducts= await productModel.find(); 
         socket.emit('server:deleteProduct', updatedProducts);
     }) 
+
+    //Chat
+    socket.on('client:messageSent', async (data)=>{
+      await messageModel.create(data);
+      const messages= await messageModel.find();
+      io.emit('server:messageStored', messages)//envio todos los mensajes a todos los clientes
+    });
+    socket.on('client:onLoadMessages', async ()=>{
+        const messages= await messageModel.find();
+        io.emit('server:onLoadMessages', messages)//envio todos los mensajes a todos los clientes
+    });
 }) 
 
-app.use(async(req, res, next) => {
-    req.io = io;
-    return next();
-  });
+// app.use(async(req, res, next) => {
+//     req.io = io;
+//     return next();
+//   });
 
 //Routes
 app.use('/api/products', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/products', express.static(__dirname +'/public'))
-// app.post('/upload', upload.single('product'), (req, res) => {
-//     //Imagenes
-//     console.log(req.body);
-//     console.log(req.file);
-//     res.send('Imagen subida')
-// })
+app.use('/chat', express.static(__dirname +'/public'))
 
-// app.get('/realtimeproducts', async (req, res) => {
-//     res.render('realTimeProducts', {})
-// })
+app.get('/chat', (req, res) => {
+  res.render('chat')
+})
+
