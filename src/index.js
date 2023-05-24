@@ -4,18 +4,11 @@ import express from 'express';
 import mongoose from 'mongoose';
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
+import chatRouter from './routes/chat.routes.js';
 import { __dirname } from './path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
-
-import { ProductManager, Product } from './ProductManager.js';
-
-//models
-import {productModel} from './models/Products.js';
-import {cartModel} from './models/Cart.js';
-import {messageModel} from './models/Messages.js';
-import { log } from 'console';
 
 
 
@@ -34,10 +27,12 @@ const port = process.env.PORT;
 //     }
 // })
 
+
 //Configuracion de Handlebars
 app.engine('handlebars', engine());//Voy a trabajar con handlebars
 app.set('view engine', 'handlebars');//Mis vistas son de tipo handlebars
 app.set('views', path.resolve(__dirname, "./views"));//src/views
+
 
 //Middleware
 app.use(express.json());//Permite que el servidor entienda los datos enviados en formato json
@@ -45,85 +40,29 @@ app.use(express.urlencoded({ extended: true }));//Permite poder usar Query Strin
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 
 
-
-
+//Conexion a MongoDB Atlas
 mongoose.connect(process.env.URL_MONGODB_ATLAS)
 .then(() => console.log('Conectado a MongoDB Atlas'))
 .catch(error => console.log(error));
 
-
-
 //Escuchar Servidor
-const server=app.listen(port, () => {
+const httpserver=app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 });
 
 //ServerIO (WebSockets)
-const io= new Server(server);
-const newProduct=null;
+const io= new Server(httpserver,{cors:{origin:'*'}});
+app.use((req, res, next) => {//Uso de Socket.io en rutas
+    req.io = io;
+    return next();
+  });
 
-io.on('connection', async(socket)=>{//cuando se establece la conexion envio un mensaje
-    console.log('Cliente conectado');
-    //Onload
-
-    //FS
-    // const productManager = new ProductManager('./src/products.txt');
-    // const onLoadProducts= await productManager.getProducts();
-
-    //Mongo
-    const onLoadProducts= await productModel.find(); 
-    //productModel.insertMany(onLoadProducts);
-    socket.emit('server:onloadProducts', onLoadProducts);
-
-    //NewProduct
-    socket.on('client:newproduct', async (data) => {
-        const newProduct = new Product(data.title, data.description, data.thumbnails, data.price, data.code, data.stock, data.status, data.category)
-        //FS
-        // await productManager.addProduct(newProduct);
-        // const updatedProducts= await productManager.getProducts();
-
-        //Mongo
-        await productModel.create(newProduct);
-        const updatedProducts= await productModel.find(); 
-        socket.emit('server:updatedProducts', updatedProducts);
-      })
-
-    //DeleteProduct
-    socket.on('client:deleteProduct', async (id) => {
-        //FS
-        // await productManager.deleteProduct(id);
-        // const updatedProducts= await productManager.getProducts();
-        
-        //Mongo
-        await productModel.deleteOne({_id: id});
-        const updatedProducts= await productModel.find(); 
-        socket.emit('server:deleteProduct', updatedProducts);
-    }) 
-
-    //Chat
-    socket.on('client:messageSent', async (data)=>{
-      await messageModel.create(data);
-      const messages= await messageModel.find();
-      io.emit('server:messageStored', messages)//envio todos los mensajes a todos los clientes
-    });
-    socket.on('client:onLoadMessages', async ()=>{
-        const messages= await messageModel.find();
-        io.emit('server:onLoadMessages', messages)//envio todos los mensajes a todos los clientes
-    });
-}) 
-
-// app.use(async(req, res, next) => {
-//     req.io = io;
-//     return next();
-//   });
 
 //Routes
-app.use('/api/products', productRouter);
-app.use('/api/cart', cartRouter);
 app.use('/api/products', express.static(__dirname +'/public'))
 app.use('/chat', express.static(__dirname +'/public'))
+app.use('/api/products', productRouter);
+app.use('/api/cart', cartRouter);
+app.use('/chat', chatRouter);
 
-app.get('/chat', (req, res) => {
-  res.render('chat')
-})
 

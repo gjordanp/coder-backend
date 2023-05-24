@@ -44,53 +44,51 @@ socket.on('server:updatedProducts', (updatedProducts)=>{
     LoadProducts(updatedProducts)
 })
 
-socket.on('server:deleteProduct', (updatedProducts)=>{
-    LoadProducts(updatedProducts)
-})
 
 
 // CHAT ----------------------------------------------------------------------------
-const bottonChat= document.getElementById('bottonChat');
-const val= document.getElementById('chatBox');
-const parrafosMensajes= document.getElementById('parrafoMensajes');
-
-let user
-
 //if url contains chat
-if(window.location.href.includes('chat')){
-Swal.fire({
-    title: 'Ingresa tu email',
-    input: 'email',
-    //inputLabel: 'Your email address',
-    inputPlaceholder: 'Ingresa tu email',
-    allowOutsideClick: false,
-}).then((result)=>{
-    user=result.value;
-    console.log(user);
-    socket.emit('client:onLoadMessages');
-});
-};
+if (window.location.href.includes('chat')) {
+    const bottonChat = document.getElementById('bottonChat');
+    const val = document.getElementById('chatBox');
+    const parrafosMensajes = document.getElementById('parrafoMensajes');
 
-bottonChat.addEventListener('click', ()=>{
-    if(val.value.trim().length>0){
-        socket.emit('client:messageSent', {user:user, message:val.value});
-        val.value="";
-    }
-});
+    let user
 
-socket.on("server:messageStored", (arrayMensajes)=>{
-    messageLoad(arrayMensajes)
-});
-socket.on("server:onLoadMessages", (arrayMensajes)=>{
-    messageLoad(arrayMensajes)
-});
-
-
-messageLoad=(arrayMensajes)=>{
-    parrafosMensajes.innerHTML="";
-    arrayMensajes.forEach(message => {
-        const d=new Date(message.date);
-        const datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-        parrafosMensajes.innerHTML+=`<p><strong>${message.user}</strong>: ${message.message} <br> ${datestring}<br><br></p>`
+    Swal.fire({
+        title: 'Ingresa tu email',
+        input: 'email',
+        //inputLabel: 'Your email address',
+        inputPlaceholder: 'Ingresa tu email',
+        allowOutsideClick: false,
+    }).then((result) => {
+        user = result.value;
+        console.log(user);
+        socket.emit('client:onLoadMessages');
     });
+
+    bottonChat.addEventListener('click', () => {
+        if (val.value.trim().length > 0) {
+            socket.emit('client:messageSent', { user: user, message: val.value });
+            val.value = "";
+        }
+    });
+
+    socket.on("server:messageStored", (arrayMensajes) => {
+        messageLoad(arrayMensajes)
+    });
+    socket.on("server:onLoadMessages", (arrayMensajes) => {
+        messageLoad(arrayMensajes)
+    });
+
+
+    messageLoad = (arrayMensajes) => {
+        parrafosMensajes.innerHTML = "";
+        arrayMensajes.forEach(message => {
+            const d = new Date(message.date);
+            const datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+            parrafosMensajes.innerHTML += `<p><strong>${message.user}</strong>: ${message.message} <br> ${datestring}<br><br></p>`
+        });
+    };
 };
+

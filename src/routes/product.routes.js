@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { ProductManager, Product } from "../ProductManager.js";
-import { productModel } from "../models/Products.js";
+import productModel from "../models/Products.js";
 
 const productRouter = Router(); //Router para manejo de rutas
+const port = process.env.PORT;
 
 //FS -------------------------------------------------------------------------------------------
 
@@ -62,30 +63,45 @@ const productRouter = Router(); //Router para manejo de rutas
 //   res.send(await productManager.deleteProduct(pid));
 // });
 
+
 //MONGO -------------------------------------------------------------------------------------------
-const productManager = new ProductManager("./src/products.txt");
+
+productRouter.get("/seedproducts", async (req, res) => {
+  const productManager = new ProductManager("./src/productsSeed.txt");
+  const seedProducts= await productManager.getProducts();
+  //console.log(seedProducts);
+  await productModel.insertMany(seedProducts);
+  res.send(await productModel.find());
+});
+
 productRouter.get("/", async (req, res) => {
   try {
-    const products = await productModel.find(); //obtenemos los productos
-    const { limit } = req.query; //obtenemos el query limit
-    if (limit) {
-      products.splice(limit);
-    } //si existe limit, lo aplicamos
-    //res.send(products); //enviamos los productos
-    res.render("home", { products: products });
+    const products = await productModel.find().lean(); //obtenemos los productos
+    const { limit, page, sort, query } = req.query; //obtenemos el query limit
+
+    const productosfiltrados = await productModel.paginate(
+      //Primer parametro: filtro
+      {},
+      //{size: "medium"},
+      //Segundo parametro: opciones
+      {limit: limit??10, page: page??1, sort: {price: sort}, lean: true}//Lean es para formato de objeto
+      
+    )    
+    productosfiltrados.prevLink = productosfiltrados.hasPrevPage?`http://localhost:${port}/api/products?page=${productosfiltrados.prevPage}`:'';
+    productosfiltrados.nextLink = productosfiltrados.hasNextPage?`http://localhost:${port}/api/products?page=${productosfiltrados.nextPage}`:'';
+    productosfiltrados.status= (!(page<=0||page>productosfiltrados.totalPages))?"success": "error";
+ 
+
+    // if (limit) {
+    //   products.splice(limit);
+    // } //si existe limit, lo aplicamos
+    res.send(productosfiltrados); //enviamos los productos
+    //res.render("home", { products: products });
   } catch (error) {
     res.send("ERROR: " + error);
   }
 });
 
-productRouter.get("/realtimeproducts", async (req, res) => {
-  try {
-    const products = await productModel.find(); //obtenemos los productos
-    res.render("realTimeProducts", { products: products });
-  } catch (error) {
-    res.send("ERROR: " + error);
-  }
-});
 
 productRouter.get("/:pid", async (req, res) => {
   try {
@@ -99,12 +115,12 @@ productRouter.get("/:pid", async (req, res) => {
 
 productRouter.post("/", async (req, res) => {
   try {
-    const {title,description,thumbnails,price,code,stock,status,category,} = req.body; //Consulto los datos enviados por postman
-    if (!title ||!description ||!code ||!price ||!status ||!category ||!stock) {
+    const { title, description, thumbnails, price, code, stock, status, category, } = req.body; //Consulto los datos enviados por postman
+    if (!title || !description || !code || !price || !status || !category || !stock) {
       //Si no hay datos
       res.send("El producto no contiene todos los datos requeridos");
     } else {
-      const newProduct = new Product(title,description,thumbnails,price,code,stock,status,category);
+      const newProduct = new Product(title, description, thumbnails, price, code, stock, status, category);
       res.send(await productModel.create(newProduct));
     }
   } catch (error) {
@@ -116,8 +132,8 @@ productRouter.post("/", async (req, res) => {
 productRouter.put("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid; //Consulto el id enviado por la url
-    const {title,description,thumbnails,price,code,stock,status,category} = req.body; //Consulto los datos enviados por postman
-    const updatedObject = {title: title,description: description,thumbnails: thumbnails,price: price,code: code,stock: stock,status: status,category: category};
+    const { title, description, thumbnails, price, code, stock, status, category } = req.body; //Consulto los datos enviados por postman
+    const updatedObject = { title: title, description: description, thumbnails: thumbnails, price: price, code: code, stock: stock, status: status, category: category };
     res.send(await productModel.findByIdAndUpdate(pid, updatedObject)); //return implicito
   } catch (error) {
     res.send("ERROR: " + error);
@@ -132,6 +148,47 @@ productRouter.delete("/:pid", async (req, res) => {
   } catch (error) {
     res.send("ERROR: " + error);
   }
+});
+
+
+productRouter.get("/realtimeproducts", async (req, res) => {
+  const io = req.io;
+
+  //Conexion a socket.io
+  io.on('connection', async (socket) => {//cuando se establece la conexion envio un mensaje
+    console.log('Cliente conectado a RealTimeProducts');
+
+    //Onload
+    socket.emit('server:onloadProducts', await productModel.find());
+    //NewProduct
+    socket.on('client:newproduct', (data) => { newProduct(data) })
+    //DeleteProduct
+    socket.on('client:deleteProduct', (id) => { deleteProduct(id) })
+
+
+    const newProduct = async (data) => {
+      const newProduct = new Product(data.title, data.description, data.thumbnails, data.price, data.code, data.stock, data.status, data.category)
+      await productModel.create(newProduct);
+      const updatedProducts = await productModel.find();
+      socket.emit('server:updatedProducts', updatedProducts);
+    };
+
+    const deleteProduct = async (id) => {
+      await productModel.deleteOne({ _id: id });
+      const updatedProducts = await productModel.find();
+      socket.emit('server:updatedProducts', updatedProducts);
+    };
+
+  });
+
+  //Render
+  try {
+    const products = await productModel.find(); //obtenemos los productos
+    res.render("realTimeProducts", { products: products });
+  } catch (error) {
+    res.send("ERROR: " + error);
+  }
+
 });
 
 export default productRouter;
