@@ -15,4 +15,4 @@ const messageSchema = new Schema({
   }
 });
 
-export const messageModel=model("Message", messageSchema);
+export const messageModel=model("message", messageSchema);

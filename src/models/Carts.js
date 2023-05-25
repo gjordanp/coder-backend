@@ -4,9 +4,10 @@ const cartSchema = new Schema({
   products: {
     type: [
       {
+        _id: false,
         id_prod: {
           type: Schema.Types.ObjectId,
-          ref: "Product",
+          ref: "product",
         },
         quantity: Number,
       },
@@ -15,5 +16,5 @@ const cartSchema = new Schema({
   },
 });
 
-export const cartModel = model("Cart", cartSchema);
+export const cartModel = model("cart", cartSchema);
 

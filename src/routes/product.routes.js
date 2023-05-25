@@ -76,27 +76,41 @@ productRouter.get("/seedproducts", async (req, res) => {
 
 productRouter.get("/", async (req, res) => {
   try {
-    const products = await productModel.find().lean(); //obtenemos los productos
-    const { limit, page, sort, query } = req.query; //obtenemos el query limit
+    //const products = await productModel.find().lean(); //obtenemos los productos
+    const { limit, page, sort, query } = req.query; //obtenemos el query limit page sort y query
+    const objQuery = query!=undefined?JSON.parse(query):undefined;//query debe escribisrse en formato JSON en URL {"category":"kites","status":"true"}
+    //console.log(objQuery);
+    const queryFail=query!=undefined?Object.keys(objQuery).some(key => {return (key != "category" && key != "status")}):undefined;
+    //console.log(queryFail);
 
-    const productosfiltrados = await productModel.paginate(
+    let paginatedProducts = await productModel.paginate(
       //Primer parametro: filtro
-      {},
-      //{size: "medium"},
+      objQuery??{},
+
       //Segundo parametro: opciones
       {limit: limit??10, page: page??1, sort: {price: sort}, lean: true}//Lean es para formato de objeto
       
-    )    
-    productosfiltrados.prevLink = productosfiltrados.hasPrevPage?`http://localhost:${port}/api/products?page=${productosfiltrados.prevPage}`:'';
-    productosfiltrados.nextLink = productosfiltrados.hasNextPage?`http://localhost:${port}/api/products?page=${productosfiltrados.nextPage}`:'';
-    productosfiltrados.status= (!(page<=0||page>productosfiltrados.totalPages))?"success": "error";
- 
+    );    
+    const limitString=limit!=undefined?`limit=${limit}&`:'';
+    const sortString=sort!=undefined?`sort=${sort}&`:'';
+    const queryString=query!=undefined?`query=${query}&`:'';
 
-    // if (limit) {
-    //   products.splice(limit);
-    // } //si existe limit, lo aplicamos
-    res.send(productosfiltrados); //enviamos los productos
-    //res.render("home", { products: products });
+    paginatedProducts.prevLink = paginatedProducts.hasPrevPage?`http://localhost:${port}/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.prevPage}`:'';
+    paginatedProducts.nextLink = paginatedProducts.hasNextPage?`http://localhost:${port}/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.nextPage}`:'';
+    paginatedProducts={"status":(!(page<=0||page>paginatedProducts.totalPages))?"success": "error",...paginatedProducts};
+
+
+    if (queryFail){
+      res.status(400).send(`ERROR: en query se debe especificar category o status o ambos en formato JSON 
+      </br>ejemplos: </br>query={\"category\":\"kites\"} 
+      </br>query={\"status\":\"true\"}
+      </br>query={\"category\":\"kites\",\"status\":\"true\"}`);
+    }
+    else{
+      res.send(paginatedProducts); //enviamos los productos
+      //res.render("home", { products: products });
+    }
+
   } catch (error) {
     res.send("ERROR: " + error);
   }
