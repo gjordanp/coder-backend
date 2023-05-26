@@ -2,7 +2,9 @@
 <br>
 <h2>Cart ID: {{cart._id}}</h2>
 <br>
-
+<button onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
+<br>
+<br>
 <ul id="docs">
     {{#each cart.products}}
     <li>
@@ -17,6 +19,7 @@
         <br>
         <p><strong>quantity:</strong> {{this.quantity}}</p>
         <br>
+        <button class="deleteButton" data-id={{this.id_prod._id}}>Borrar</button>
         {{!-- <button class="postButton" data-id={{this._id}}>Borrar</button> --}}
     </li>
     {{/each}}

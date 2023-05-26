@@ -98,9 +98,10 @@ if (window.location.href.includes('chat')) {
 const postButtons=document.querySelectorAll('.postButton');
 postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
     if(e.target.dataset.id===postButton.dataset.id) {
-        addToCart(postButton.dataset.id);
+        addToCart(postButton.dataset.id).then(()=>window.location.href = "http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150");
     }
 })})
+
 //Agregar al carrito de ID hardcodeado
 const addToCart= async (pid)=>{
     try {
@@ -117,3 +118,27 @@ const addToCart= async (pid)=>{
         console.error(`Error: ${error}`);
     }
 };
+
+//Delete from CART ----------------------------------------------------------------------------
+const deleteButtons=document.querySelectorAll('.deleteButton');
+deleteButtons.forEach(deleteButton=>{deleteButton.addEventListener('click', (e)=>{
+    if(e.target.dataset.id===deleteButton.dataset.id) {
+        deleteFromCart(deleteButton.dataset.id);
+        window.location.reload();
+    }
+} )});
+//Eliminar del carrito de ID hardcodeado
+const deleteFromCart= async (pid)=>{
+    try {
+        const response= await fetch(`http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150/product/${pid}`,{
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+        });
+        console.log('Completed!', response);
+    } catch (error) {
+        console.error(`Error: ${error}`);
+    }
+}
