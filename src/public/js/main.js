@@ -5,6 +5,8 @@ const socket= io();
 //socket.on() //escuchar eventos
 
 
+
+
 const formulario= document.getElementById('formulario');
 formulario?.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -92,3 +94,26 @@ if (window.location.href.includes('chat')) {
     };
 };
 
+// Add to CART ----------------------------------------------------------------------------
+const postButtons=document.querySelectorAll('.postButton');
+postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
+    if(e.target.dataset.id===postButton.dataset.id) {
+        addToCart(postButton.dataset.id);
+    }
+})})
+//Agregar al carrito de ID hardcodeado
+const addToCart= async (pid)=>{
+    try {
+        const response= await fetch(`http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150/product/${pid}`,{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"quantity": 1}),
+        });
+        console.log('Completed!', response);
+    } catch (error) {
+        console.error(`Error: ${error}`);
+    }
+};

@@ -46,8 +46,9 @@ cartRouter.get('/', async (req, res) => {
 cartRouter.get('/:cid', async (req, res) => {
     const cid= req.params.cid
     try {
-        const cart=await cartModel.findById(cid).populate('products.id_prod');//obtenemos los productos
-        res.send(cart);
+        const cart=await cartModel.findById(cid).populate('products.id_prod').lean();//obtenemos los productos
+        //res.send(cart);
+        res.render('carts',{cart:cart});
     } catch (error) {
         res.send("ERROR: " + error);
     }

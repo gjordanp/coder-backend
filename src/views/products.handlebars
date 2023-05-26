@@ -1,0 +1,64 @@
+<h1>Productos</h1>
+<br>
+<h2>Status: {{pagProducts.status}}</h2>
+<br>
+<div class="page-links">
+    {{#if pagProducts.hasPrevPage}}
+    <a href={{pagProducts.prevLink}} >
+    <button class="btn-left">Anterior</button>
+    </a>
+    {{else}}
+    <a>
+    <button class="btn-left btn-disabled">Anterior</button>
+    </a>
+    {{/if}}
+    <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
+    {{#if pagProducts.hasNextPage}}
+    <a href={{pagProducts.nextLink}} >
+    <button class="btn-right">Siguiente</button>
+    </a>
+    {{else}}
+    <a>
+    <button class="btn-right btn-disabled">Siguiente</button>
+    </a>
+    {{/if}}
+</div>
+
+<ul id="docs">
+    {{#each pagProducts.docs}}
+    <li>
+        <p><strong>id:</strong> {{this._id}}</p>
+        <p><strong>title:</strong> {{this.title}}</p>
+        <p><strong>description:</strong>{{this.description}}</p>
+        <p><strong>thumbnails:</strong> {{this.thumbnails}}</p>
+        <p><strong>price:</strong> {{this.price}}</p>
+        <p><strong>code:</strong> {{this.code}}</p>
+        <p><strong>stock:</strong> {{this.stock}}</p>
+        <p><strong>category:</strong> {{this.category}}</p>
+        <br>
+        <button class="postButton" data-id={{this._id}}>Agregar 1 producto al carrito</button>
+    </li>
+    {{/each}}
+</ul>
+<div class="page-links">
+    {{#if pagProducts.hasPrevPage}}
+    <a href={{pagProducts.prevLink}} >
+    <button class="btn-left">Anterior</button>
+    </a>
+    {{else}}
+    <a>
+    <button class="btn-left btn-disabled">Anterior</button>
+    </a>
+    {{/if}}
+    <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
+    {{#if pagProducts.hasNextPage}}
+    <a href={{pagProducts.nextLink}} >
+    <button class="btn-right">Siguiente</button>
+    </a>
+    {{else}}
+    <a>
+    <button class="btn-right btn-disabled">Siguiente</button>
+    </a>
+    {{/if}}
+</div>
+

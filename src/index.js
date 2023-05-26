@@ -60,6 +60,7 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 
 //Routes
 app.use('/api/products', express.static(__dirname +'/public'))
+app.use('/api/carts', express.static(__dirname +'/public'))
 app.use('/chat', express.static(__dirname +'/public'))
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);

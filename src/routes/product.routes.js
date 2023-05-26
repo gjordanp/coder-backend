@@ -107,8 +107,8 @@ productRouter.get("/", async (req, res) => {
       </br>query={\"category\":\"kites\",\"status\":\"true\"}`);
     }
     else{
-      res.send(paginatedProducts); //enviamos los productos
-      //res.render("home", { products: products });
+      //res.send(paginatedProducts); //enviamos los productos
+      res.render("products", { pagProducts: paginatedProducts });
     }
 
   } catch (error) {
