@@ -5,9 +5,8 @@
 }
 body{
     background-color: rgb(230, 230, 230);
-    font-family: sans-serif;
-    font-size: 0.8rem;
     margin:2rem;
+    font-size: 0.875rem;
 }
 /* material UI form */
 form{
@@ -19,11 +18,14 @@ form{
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 /* form label */
-label{
+.product-label{
     font-weight: bold;
 }
 /* form input */
-input{
+p{
+    margin-bottom: 0;
+}
+.product-input{
     width: 100%;
     padding: 4px;
     border: 1px solid #ccc;
@@ -37,6 +39,7 @@ ul li{
     background-color: white;
     padding: 10px;
     border-radius: 0.25rem;
+    
 }
 
 /* MUI Button */
@@ -92,3 +95,4 @@ a button{
 .anchor-disabled {
     pointer-events: none;
 }
+

@@ -1,10 +1,14 @@
 import {Server} from 'socket.io';
 import 'dotenv/config';
 import express from 'express';
+import session from 'express-session';
 import mongoose from 'mongoose';
+import MongoStore from 'connect-mongo';
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
 import chatRouter from './routes/chat.routes.js';
+import homeRouter from './routes/home.routes.js';
+import sessionRouter from './routes/sessions.routes.js';
 import { __dirname } from './path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
@@ -37,6 +41,16 @@ app.set('views', path.resolve(__dirname, "./views"));//src/views
 //Middleware
 app.use(express.json());//Permite que el servidor entienda los datos enviados en formato json
 app.use(express.urlencoded({ extended: true }));//Permite poder usar Query Strings
+app.use(session({ //sessions en mongo atlas
+    store: MongoStore.create({
+      mongoUrl: process.env.URL_MONGODB_ATLAS,
+      mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+      ttl: 15,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 
 
@@ -62,8 +76,12 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 app.use('/api/products', express.static(__dirname +'/public'))
 app.use('/api/carts', express.static(__dirname +'/public'))
 app.use('/chat', express.static(__dirname +'/public'))
+//app.use('/', express.static(__dirname +'/public'))
+
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/chat', chatRouter);
+app.use('/api/sessions', sessionRouter);
+app.use('/', homeRouter);
 
 

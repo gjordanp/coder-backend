@@ -1,15 +1,13 @@
-<ul id="product-list">
-    {{#each products}}
-    <li>
-        <p><strong>id:</strong> {{this._id}}</p>
-        <p><strong>title:</strong> {{this.title}}</p>
-        <p><strong>description:</strong>{{this.description}}</p>
-        <p><strong>thumbnails:</strong> {{this.thumbnails}}</p>
-        <p><strong>price:</strong> {{this.price}}</p>
-        <p><strong>code:</strong> {{this.code}}</p>
-        <p><strong>stock:</strong> {{this.stock}}</p>
-        <p><strong>category:</strong> {{this.category}}</p>
-        <br>
-    </li>
-    {{/each}}
-</ul>
+{{!-- <div>
+<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/chat/'">Chat</button>
+<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
+<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
+<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/products/realtimeproducts'">Realtimeproducts</button>
+</div> --}}
+
+<div>
+<button onclick="window.location.href='http://localhost:8080/chat/'">Chat</button>
+<button onclick="window.location.href='http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
+<button onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
+<button onclick="window.location.href='http://localhost:8080/api/products/realtimeproducts'">Realtimeproducts</button>
+</div>

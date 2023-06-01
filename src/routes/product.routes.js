@@ -2,6 +2,7 @@ import { Router } from "express";
 import { ProductManager, Product } from "../ProductManager.js";
 import productModel from "../models/Products.js";
 
+
 const productRouter = Router(); //Router para manejo de rutas
 const port = process.env.PORT;
 
@@ -76,6 +77,12 @@ productRouter.get("/seedproducts", async (req, res) => {
 
 productRouter.get("/", async (req, res) => {
   try {
+    
+    //Si no existe una session redireccionamos al login
+    if (!req.session.user) {
+      res.redirect("/");
+    }
+
     //const products = await productModel.find().lean(); //obtenemos los productos
     const { limit, page, sort, query } = req.query; //obtenemos el query limit page sort y query
     const objQuery = query!=undefined?JSON.parse(query):undefined;//query debe escribisrse en formato JSON en URL {"category":"kites","status":"true"}
@@ -108,7 +115,7 @@ productRouter.get("/", async (req, res) => {
     }
     else{
       //res.send(paginatedProducts); //enviamos los productos
-      res.render("products", { pagProducts: paginatedProducts });
+      res.render("products", { pagProducts: paginatedProducts , user: req.session.user });
     }
 
   } catch (error) {
@@ -167,6 +174,7 @@ productRouter.delete("/:pid", async (req, res) => {
 
 productRouter.get("/realtimeproducts", async (req, res) => {
   const io = req.io;
+  console.log("hola");
 
   //Conexion a socket.io
   io.on('connection', async (socket) => {//cuando se establece la conexion envio un mensaje
@@ -198,7 +206,8 @@ productRouter.get("/realtimeproducts", async (req, res) => {
   //Render
   try {
     const products = await productModel.find(); //obtenemos los productos
-    res.render("realTimeProducts", { products: products });
+    console.log(products);
+    res.render("realtimeproducts", { products: products });
   } catch (error) {
     res.send("ERROR: " + error);
   }
