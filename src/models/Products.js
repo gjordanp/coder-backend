@@ -35,5 +35,5 @@ const productSchema = new Schema({
 });
 
 productSchema.plugin(paginate);//agrega el metodo paginate a todos los modelos
-const productModel = model("product", productSchema);
+const productModel = model("products", productSchema);
 export default productModel;

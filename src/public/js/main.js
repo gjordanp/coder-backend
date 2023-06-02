@@ -5,8 +5,6 @@ const socket= io();
 //socket.on() //escuchar eventos
 
 
-
-
 const formulario= document.getElementById('formulario');
 formulario?.addEventListener('submit', (e)=>{
     e.preventDefault();
@@ -19,6 +17,7 @@ formulario?.addEventListener('submit', (e)=>{
 
 //Cargar productos
 LoadProducts=(products)=>{
+    console.log("test");
     const productlist=document.getElementById('product-list');
     productlist.innerHTML='';
     products.forEach(product => {
@@ -127,6 +126,7 @@ deleteButtons.forEach(deleteButton=>{deleteButton.addEventListener('click', (e)=
         window.location.reload();
     }
 } )});
+
 //Eliminar del carrito de ID hardcodeado
 const deleteFromCart= async (pid)=>{
     try {

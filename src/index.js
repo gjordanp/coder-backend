@@ -2,8 +2,8 @@ import {Server} from 'socket.io';
 import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
-import mongoose from 'mongoose';
-import MongoStore from 'connect-mongo';
+import mongoose from 'mongoose'; //Conexion a Mongo
+import MongoStore from 'connect-mongo'; //Sessiones en Mongo
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
 import chatRouter from './routes/chat.routes.js';
@@ -81,7 +81,7 @@ app.use('/chat', express.static(__dirname +'/public'))
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/chat', chatRouter);
-app.use('/api/sessions', sessionRouter);
-app.use('/', homeRouter);
+app.use('/', sessionRouter);
+//app.use('/', homeRouter);
 
 
