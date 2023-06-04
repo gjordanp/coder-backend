@@ -37,11 +37,21 @@ export const login = async (req, res) => {
     res.render('login')
 }
 
+export const profile = async (req, res) => {
+    if (!req.session.user) {
+        res.redirect("/");
+    }
+    else{
+        res.render('profile', {user: req.session.user})
+    }
+}
+
 export const tryLogin = async (req, res) => {
     //obtenemos datos de body
     const {email, password} = req.body;
     if(!email || !password){
-        res.send("No se ingresaron todos los datos");
+        //res.send("No se ingresaron todos los datos");
+        res.render('errors', {message: "No se ingresaron todos los inputs del formulario."});
     }
     else{
         const user=await userModel.findOne({email: email});
@@ -51,11 +61,14 @@ export const tryLogin = async (req, res) => {
                 res.redirect('api/products');
             }
             else{//Si la contraseña es incorrecta
-                res.send("Contraseña incorrecta");
+                res.render('errors', {message: "Contraseña incorrecta."});
+                //res.render('errors');
+                //res.send("Contraseña incorrecta");
             }
         }
         else{//Si el usuario no existe
-            res.send("El usuario no existe");
+            res.render('errors', {message: "El email no existe."});
+            //res.send("El usuario no existe");
         }
     }
 }

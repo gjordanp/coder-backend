@@ -45,7 +45,7 @@ app.use(session({ //sessions en mongo atlas
     store: MongoStore.create({
       mongoUrl: process.env.URL_MONGODB_ATLAS,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 15,
+      ttl: 300,// 5 minutos
     }),
     secret: process.env.SESSION_SECRET,
     resave: false,
