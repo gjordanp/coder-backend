@@ -1,5 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
+import gitHubStrategy from "passport-github2";
 import userModel from "../models/Users.js";
 import { createHash, validatePassword } from "../utils/bcript.js";
 
@@ -53,6 +54,33 @@ const initializePassport = () => {
             }
             //Contraseña incorrecta
             return done(null, false, { message: "Contraseña incorrecta" });
+        } catch (error) {
+            return done(error);
+        }
+    }));
+
+    passport.use('github',new gitHubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/api/sessions/githubcallback"
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            console.log(profile);
+            const user = await userModel.findOne({email: profile._json.email});
+            if(!user){ //Si el usuario no existe, lo crea
+                const newUser = new userModel({
+                    first_name: profile._json.name,
+                    last_name: '',
+                    age: 0,
+                    email: profile._json.email,
+                    password: ''
+                });
+                const createdUser = await userModel.create(newUser);
+                return done(null, createdUser);
+            }
+            else{//Si el usuario ya existe, retorna el usuario
+                return done(null, user);
+            }
         } catch (error) {
             return done(error);
         }
