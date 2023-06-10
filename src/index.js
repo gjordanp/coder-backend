@@ -2,6 +2,8 @@ import {Server} from 'socket.io';
 import 'dotenv/config';
 import express from 'express';
 import session from 'express-session';
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 import mongoose from 'mongoose'; //Conexion a Mongo
 import MongoStore from 'connect-mongo'; //Sessiones en Mongo
 import productRouter from './routes/product.routes.js';
@@ -51,6 +53,9 @@ app.use(session({ //sessions en mongo atlas
     resave: false,
     saveUninitialized: false
 }))
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 
 
