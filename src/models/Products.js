@@ -31,7 +31,7 @@ const productSchema = new Schema({
     type: Boolean,
     default: true,
   },
-  thumbnail: [],
+  thumbnails: [],
 });
 
 productSchema.plugin(paginate);//agrega el metodo paginate a todos los modelos

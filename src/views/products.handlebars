@@ -4,7 +4,7 @@
 <p>Edad: {{user.age}}</p>
 <p>Rol: {{user.role}}</p>
 <button onclick="window.location.href='/api/sessions/logout'">Cerrar Session</button>
-<br/>
+<br />
 <h1>Productos</h1>
 <br>
 <h2>Status: {{pagProducts.status}}</h2>
@@ -13,61 +13,66 @@
 <button onclick="window.location.href='/api/sessions/profile'">Perfil</button>
 <div class="page-links">
     {{#if pagProducts.hasPrevPage}}
-    <a href={{pagProducts.prevLink}} >
-    <button class="btn-left">Anterior</button>
+    <a href={{pagProducts.prevLink}}>
+        <button class="btn-left">Anterior</button>
     </a>
     {{else}}
     <a>
-    <button class="btn-left btn-disabled">Anterior</button>
+        <button class="btn-left btn-disabled">Anterior</button>
     </a>
     {{/if}}
     <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
     {{#if pagProducts.hasNextPage}}
-    <a href={{pagProducts.nextLink}} >
-    <button class="btn-right">Siguiente</button>
+    <a href={{pagProducts.nextLink}}>
+        <button class="btn-right">Siguiente</button>
     </a>
     {{else}}
     <a>
-    <button class="btn-right btn-disabled">Siguiente</button>
+        <button class="btn-right btn-disabled">Siguiente</button>
     </a>
     {{/if}}
 </div>
 
-<ul id="docs">
+<ul id="docs" class="d-flex justify-content-center flex-wrap gap-4">
     {{#each pagProducts.docs}}
-    <li>
-        <p><strong>id:</strong> {{this._id}}</p>
-        <p><strong>title:</strong> {{this.title}}</p>
-        <p><strong>description:</strong>{{this.description}}</p>
-        <p><strong>thumbnails:</strong> {{this.thumbnails}}</p>
-        <p><strong>price:</strong> {{this.price}}</p>
-        <p><strong>code:</strong> {{this.code}}</p>
-        <p><strong>stock:</strong> {{this.stock}}</p>
-        <p><strong>category:</strong> {{this.category}}</p>
-        <br>
-        <button class="postButton" data-id={{this._id}}>Agregar 1 producto al carrito</button>
-    </li>
+    <div class="card" style="width: 20rem;">
+        <img src={{this.thumbnails}}[0] class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">{{this.title}}</h5>
+            <li>
+                <p><strong>id:</strong> {{this._id}}</p>
+                <p><strong>description:</strong>{{this.description}}</p>
+                <p><strong>price:</strong> {{this.price}}</p>
+                <p><strong>code:</strong> {{this.code}}</p>
+                <p><strong>stock:</strong> {{this.stock}}</p>
+                <p><strong>category:</strong> {{this.category}}</p>
+                <br>
+                
+            </li>
+            <button class="postButton btn btn-primary bottom-0" data-id={{this._id}}>Agregar 1 producto al carrito</button>
+        </div>
+    </div>
+
     {{/each}}
 </ul>
 <div class="page-links">
     {{#if pagProducts.hasPrevPage}}
-    <a href={{pagProducts.prevLink}} >
-    <button class="btn-left">Anterior</button>
+    <a href={{pagProducts.prevLink}}>
+        <button class="btn-left">Anterior</button>
     </a>
     {{else}}
     <a>
-    <button class="btn-left btn-disabled">Anterior</button>
+        <button class="btn-left btn-disabled">Anterior</button>
     </a>
     {{/if}}
     <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
     {{#if pagProducts.hasNextPage}}
-    <a href={{pagProducts.nextLink}} >
-    <button class="btn-right">Siguiente</button>
+    <a href={{pagProducts.nextLink}}>
+        <button class="btn-right">Siguiente</button>
     </a>
     {{else}}
     <a>
-    <button class="btn-right btn-disabled">Siguiente</button>
+        <button class="btn-right btn-disabled">Siguiente</button>
     </a>
     {{/if}}
 </div>
-
