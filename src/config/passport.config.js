@@ -59,11 +59,11 @@ const initializePassport = () => {
             const user = await userModel.findOne({email:profile._json.email});
             if(!user){ //Si el usuario no existe, lo crea
                 const newUser = new userModel({
-                    first_name: profile._json.name,
-                    last_name: '',
+                    first_name: profile._json.name.split(' ')[0],
+                    last_name: profile._json.name.split(' ')[1]??' ',
                     age: 25,
                     email: profile._json.email,
-                    password: '12356'
+                    password: ' '
                 });
                 const createdUser = await userModel.create(newUser);
                 return done(null, createdUser);
