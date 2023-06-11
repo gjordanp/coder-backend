@@ -50,8 +50,8 @@ app.use(session({ //sessions en mongo atlas
       ttl: 300,// 5 minutos
     }),
     secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
+    resave: false, 
+    saveUninitialized: false //Evita guardar sesiones vacias
 }))
 initializePassport();
 app.use(passport.initialize());

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import passport from "passport";
 import local from "passport-local";
 import gitHubStrategy from "passport-github2";
@@ -32,17 +33,6 @@ const initializePassport = () => {
 
         }));
 
-    //Inicializamos la sesion del usuario
-    passport.serializeUser((user, done) => {
-        done(null, user._id);
-    });
-
-    //Obtener la sesion del usuario
-    passport.deserializeUser(async (id, done) => {
-        const user = await userModel.findById(id);
-        done(null, user);
-    });
-
     passport.use('login', new LocalStrategy({usernameField: 'email' }, async (username, password, done) => {
         try {
             const user = await userModel.findOne({ email: username });
@@ -62,18 +52,18 @@ const initializePassport = () => {
     passport.use('github',new gitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://localhost:8080/api/sessions/githubcallback"
+        callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             console.log(profile);
-            const user = await userModel.findOne({email: profile._json.email});
+            const user = await userModel.findOne({email:profile._json.email});
             if(!user){ //Si el usuario no existe, lo crea
                 const newUser = new userModel({
                     first_name: profile._json.name,
                     last_name: '',
-                    age: 0,
+                    age: 25,
                     email: profile._json.email,
-                    password: ''
+                    password: '12356'
                 });
                 const createdUser = await userModel.create(newUser);
                 return done(null, createdUser);
@@ -82,9 +72,20 @@ const initializePassport = () => {
                 return done(null, user);
             }
         } catch (error) {
-            return done(error);
+            return done("Error GithubLogin: "+error);
         }
     }));
+
+        //Inicializamos la sesion del usuario
+        passport.serializeUser((user, done) => {
+            done(null, user._id);
+        });
+    
+        //Obtener la sesion del usuario
+        passport.deserializeUser(async (id, done) => {
+            const user = await userModel.findById(id);
+            done(null, user);
+        });
 };
 
 export default initializePassport;

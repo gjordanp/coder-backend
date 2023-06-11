@@ -25,18 +25,20 @@ sessionRouter.get('/api/sessions/profile', profile);
 
 // -------------------------------------------------Login con Passport -----------------------------------------------
 //Ruta api/sessions
-sessionRouter.post('/api/sessions/tryregister', passport.authenticate('register',{failureRedirect:'/api/sessions/failregister',failureMessage: true}),tryRegister);
+sessionRouter.post('/api/sessions/tryregister', passport.authenticate('register',{failureRedirect:'/api/sessions/failregister'}),tryRegister);
 sessionRouter.get('/api/sessions/failregister', failregister);
 
 //Try login
-sessionRouter.post('/trylogin',passport.authenticate('login',{failureRedirect:'/api/sessions/faillogin' , failureMessage: true}), tryLogin);
+sessionRouter.post('/trylogin',passport.authenticate('login',{failureRedirect:'/api/sessions/faillogin'}), tryLogin);
 sessionRouter.get('/api/sessions/faillogin', faillogin);
 
 // github
 sessionRouter.get('/api/sessions/github', passport.authenticate('github',{scope:['user:email']}),async (req,res)=>{});
-sessionRouter.get('/api/sessions/githubcallback', passport.authenticate('github',{failureRedirect:'/'}),async (req,res)=>{
+sessionRouter.get('/api/sessions/githubcallback', 
+    passport.authenticate('github',{failureRedirect:'/'}),
+    async (req,res)=>{
     req.session.user = req.user;
-    res.redirect('/api/sessions/profile');
+    res.redirect('/api/products');
 });
 
 export default sessionRouter;
