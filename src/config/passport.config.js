@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import passport from "passport";
 import local from "passport-local";
-import gitHubStrategy from "passport-github2";
+import GitHubStrategy from "passport-github2";
+import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../models/Users.js";
 import { createHash, validatePassword } from "../utils/bcript.js";
 
@@ -49,7 +50,7 @@ const initializePassport = () => {
         }
     }));
 
-    passport.use('github',new gitHubStrategy({
+    passport.use('github',new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
         callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
@@ -61,9 +62,9 @@ const initializePassport = () => {
                 const newUser = new userModel({
                     first_name: profile._json.name.split(' ')[0],
                     last_name: profile._json.name.split(' ')[1]??' ',
-                    age: 25,
+                    age: 0,
                     email: profile._json.email,
-                    password: ' '
+                    password: 'Github'//con esta contraseña no se puede loguear, sin embargo identificamos de donde se hizo el login
                 });
                 const createdUser = await userModel.create(newUser);
                 return done(null, createdUser);
@@ -76,16 +77,49 @@ const initializePassport = () => {
         }
     }));
 
-        //Inicializamos la sesion del usuario
-        passport.serializeUser((user, done) => {
-            done(null, user._id);
-        });
-    
-        //Obtener la sesion del usuario
-        passport.deserializeUser(async (id, done) => {
-            const user = await userModel.findById(id);
-            done(null, user);
-        });
+    passport.use('google',new GoogleStrategy({
+        clientID: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: "http://localhost:8080/api/sessions/googlecallback"
+      },
+      async (accessToken, refreshToken, profile, cb)=> {
+        console.log(profile);
+        // userModel.findOrCreate({ googleId: profile.id }, async (err, user) =>{
+        //   return cb(err, user);
+        // });
+        try {
+            console.log(profile);
+            const user = await userModel.findOne({email:profile._json.email});
+            if(!user){ //Si el usuario no existe, lo crea
+                const newUser = new userModel({
+                    first_name: profile._json.given_name,
+                    last_name: profile._json.family_name,
+                    age: 0,
+                    email: profile._json.email,
+                    password: 'Google'//con esta contraseña no se puede loguear, sin embargo identificamos de donde se hizo el login
+                });
+                const createdUser = await userModel.create(newUser);
+                return cb(null, createdUser);
+            }
+            else{//Si el usuario ya existe, retorna el usuario
+                return cb(null, user);
+            }
+        } catch (error) {
+            return cb("Error GithubLogin: "+error);
+        }
+      }
+    ));
+
+    //Inicializamos la sesion del usuario
+    passport.serializeUser((user, done) => {
+        done(null, user._id);
+    });
+
+    //Obtener la sesion del usuario
+    passport.deserializeUser(async (id, done) => {
+        const user = await userModel.findById(id);
+        done(null, user);
+    });
 };
 
 export default initializePassport;

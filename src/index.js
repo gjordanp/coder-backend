@@ -81,12 +81,12 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 app.use('/api/products', express.static(__dirname +'/public'))
 app.use('/api/carts', express.static(__dirname +'/public'))
 app.use('/chat', express.static(__dirname +'/public'))
-//app.use('/', express.static(__dirname +'/public'))
+app.use('/', express.static(__dirname +'/public'))
 
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/chat', chatRouter);
-app.use('/', sessionRouter);
-//app.use('/', homeRouter);
+app.use('/api/sessions', sessionRouter);
+app.use('/', homeRouter);
 
 

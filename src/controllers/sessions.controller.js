@@ -32,13 +32,13 @@ export const tryRegister = async (req, res) => {
         }
         res.status(200).send({status: "success", payload: req.user});
     } catch (error) {
-        res.status(401).render('errors',{status: "error", message: "Register failed"});
+        res.status(401).render('errors',{status: "error", message: "Error de Registro"});
     }
 }
 
 export const failregister = async (req, res) => {
     console.log(req);
-    res.status(500).render('errors', {status: "error", message: req.done});
+    res.status(500).render('errors', {status: "error", message: "Error de Registro"});
 }
 
 export const logout = async (req, res) => {
@@ -96,10 +96,10 @@ export const tryLogin = async (req, res) => {
         }
         res.status(200).redirect('api/products');
     } catch (error) {
-        res.status(401).render('errors',{status: "error", message: error.message});
+        res.status(401).render('errors',{status: "error", message: "Login Error"});
     }
 }
 export const faillogin = async (req, res) => {
     
-    res.status(500).render('errors', req.message);
+    res.status(500).render('errors', {status: "error", message: "Credenciales Incorrectas"});
 }
