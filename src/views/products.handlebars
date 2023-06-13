@@ -1,78 +1,68 @@
-<h1>Bienvenido {{user.first_name}}</h1>
-<p>Apellido: {{user.last_name}}</p>
-<p>Email: {{user.email}}</p>
-<p>Edad: {{user.age}}</p>
-<p>Rol: {{user.role}}</p>
-<button onclick="window.location.href='/api/sessions/logout'">Cerrar Session</button>
-<br />
-<h1>Productos</h1>
-<br>
-<h2>Status: {{pagProducts.status}}</h2>
-<br>
-<button onclick="window.location.href='/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
-<button onclick="window.location.href='/api/sessions/profile'">Perfil</button>
-<div class="page-links">
-    {{#if pagProducts.hasPrevPage}}
-    <a href={{pagProducts.prevLink}}>
-        <button class="btn-left">Anterior</button>
-    </a>
-    {{else}}
-    <a>
-        <button class="btn-left btn-disabled">Anterior</button>
-    </a>
-    {{/if}}
-    <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
-    {{#if pagProducts.hasNextPage}}
-    <a href={{pagProducts.nextLink}}>
-        <button class="btn-right">Siguiente</button>
-    </a>
-    {{else}}
-    <a>
-        <button class="btn-right btn-disabled">Siguiente</button>
-    </a>
-    {{/if}}
-</div>
+<div class="container">
+    <h1>Bienvenido {{user.first_name}}</h1>
+    <p>Apellido: {{user.last_name}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Edad: {{user.age}}</p>
+    <p>Rol: {{user.role}}</p>
+    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/logout'">Cerrar
+        Session</button>
+    <br />
+    <h1>Productos</h1>
+    <br>
+    <h2>Status: {{pagProducts.status}}</h2>
+    <br>
+    <button class="btn btn-outline-primary"
+        onclick="window.location.href='/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
+    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+    <ul class="pagination justify-content-center mt-3">
+        {{#if pagProducts.hasPrevPage}}
+        <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>Anterior</a></li>
+        <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>{{pagProducts.prevPage}}</a></li>
+        {{else}}
+        <li class="page-item"><a class="page-link disabled" href={{pagProducts.prevLink}}>Anterior</a></li>
+        {{/if}}
+        <li class="page-item"><a class="page-link" href=''>{{pagProducts.page}}</a></li>
+        {{#if pagProducts.hasNextPage}}
+        <li class="page-item"><a class="page-link" href={{pagProducts.nextLink}}>{{pagProducts.nextPage}}</a></li>
+        <li class="page-item"><a class="page-link" href={{pagProducts.nextLink}}>Siguiente</a></li>
+        {{else}}
+        <li class="page-item"><a class="page-link disabled" href={{pagProducts.nextLink}}>Siguiente</a></li>
+        {{/if}}
+    </ul>
 
-<ul id="docs" class="d-flex justify-content-center flex-wrap gap-4">
-    {{#each pagProducts.docs}}
-    <div class="card" style="width: 20rem;">
-        <img src={{this.thumbnails}}[0] class="card-img-top" alt="...">
-        <div class="card-body">
-            <h5 class="card-title">{{this.title}}</h5>
-            <li>
-                <p><strong>id:</strong> {{this._id}}</p>
-                <p><strong>description:</strong>{{this.description}}</p>
-                <p><strong>price:</strong> {{this.price}}</p>
-                <p><strong>code:</strong> {{this.code}}</p>
-                <p><strong>stock:</strong> {{this.stock}}</p>
-                <p><strong>category:</strong> {{this.category}}</p>
-                <br>
-                
-            </li>
-            <button class="postButton btn btn-primary bottom-0" data-id={{this._id}}>Agregar 1 producto al carrito</button>
-        </div>
-    </div>
+    <ul id="docs" class="d-flex justify-content-center flex-wrap gap-4 p-0">
+        {{#each pagProducts.docs}}
+        <li class="card" style="width: 20rem;">
+            <img src={{this.thumbnails}}[0] class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">{{this.title}}</h5>
+                    <p><strong>id:</strong> {{this._id}}</p>
+                    <p><strong>description:</strong>{{this.description}}</p>
+                    <p><strong>price:</strong> {{this.price}}</p>
+                    <p><strong>code:</strong> {{this.code}}</p>
+                    <p><strong>stock:</strong> {{this.stock}}</p>
+                    <p><strong>category:</strong> {{this.category}}</p>
+                    <br>
+                <button class="postButton btn btn-primary bottom-0" data-id={{this._id}}>Agregar 1 producto al
+                    carrito</button>
+            </div>
+        </li>
 
-    {{/each}}
-</ul>
-<div class="page-links">
-    {{#if pagProducts.hasPrevPage}}
-    <a href={{pagProducts.prevLink}}>
-        <button class="btn-left">Anterior</button>
-    </a>
-    {{else}}
-    <a>
-        <button class="btn-left btn-disabled">Anterior</button>
-    </a>
-    {{/if}}
-    <h2>{{pagProducts.page}} de {{pagProducts.totalPages}}</h2>
-    {{#if pagProducts.hasNextPage}}
-    <a href={{pagProducts.nextLink}}>
-        <button class="btn-right">Siguiente</button>
-    </a>
-    {{else}}
-    <a>
-        <button class="btn-right btn-disabled">Siguiente</button>
-    </a>
-    {{/if}}
+        {{/each}}
+    </ul>
+        <ul class="pagination justify-content-center">
+        {{#if pagProducts.hasPrevPage}}
+        <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>Anterior</a></li>
+        <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>{{pagProducts.prevPage}}</a></li>
+        {{else}}
+        <li class="page-item"><a class="page-link disabled" href={{pagProducts.prevLink}}>Anterior</a></li>
+        {{/if}}
+        <li class="page-item"><a class="page-link" href=''>{{pagProducts.page}}</a></li>
+        {{#if pagProducts.hasNextPage}}
+        <li class="page-item"><a class="page-link" href={{pagProducts.nextLink}}>{{pagProducts.nextPage}}</a></li>
+        <li class="page-item"><a class="page-link" href={{pagProducts.nextLink}}>Siguiente</a></li>
+        {{else}}
+        <li class="page-item"><a class="page-link disabled" href={{pagProducts.nextLink}}>Siguiente</a></li>
+        {{/if}}
+    </ul>
 </div>
