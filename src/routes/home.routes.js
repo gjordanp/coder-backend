@@ -10,7 +10,7 @@ homeRouter.get('/', async (req,res)=>{
         res.redirect("/api/sessions/login");
     }
     else{
-        res.render('home')
+        res.render('home',{user:req.session.user})
     }
 })
 

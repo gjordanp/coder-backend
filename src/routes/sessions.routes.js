@@ -49,4 +49,9 @@ sessionRouter.get('/githubcallback',
     req.session.user = req.user;
     res.redirect('../products');
 });
+
+//Current user
+sessionRouter.get('/current', (req,res)=>{
+    res.send(req.user);
+})
 export default sessionRouter;

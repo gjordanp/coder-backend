@@ -4,6 +4,7 @@ import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
 import userModel from "../models/Users.js";
+import { cartModel } from '../models/Carts.js';
 import { createHash, validatePassword } from "../utils/bcript.js";
 
 const LocalStrategy = local.Strategy;
@@ -27,7 +28,9 @@ const initializePassport = () => {
                 });
                 const createdUser = await userModel.create(newUser);
                 //Si todo sale bien, retornamos el usuario creado
-                return done(null, createdUser);
+                const newCart=await cartModel.create({products:[]});
+                const updatedUser=await userModel.findOneAndUpdate({_id: req.user._id},{cart: {id_cart: newCart._id}}, {new: true});  
+                return done(null, updatedUser);
             } catch (error) {
                 return done("Error al obtener el usuario: " + error);
             }
@@ -56,7 +59,7 @@ const initializePassport = () => {
         callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
     }, async (accessToken, refreshToken, profile, done) => {
         try {
-            console.log(profile);
+            //console.log(profile);
             const user = await userModel.findOne({email:profile._json.email});
             if(!user){ //Si el usuario no existe, lo crea
                 const newUser = new userModel({
@@ -67,7 +70,9 @@ const initializePassport = () => {
                     password: 'Github'//con esta contraseña no se puede loguear, sin embargo identificamos de donde se hizo el login
                 });
                 const createdUser = await userModel.create(newUser);
-                return done(null, createdUser);
+                const newCart=await cartModel.create({products:[]});
+                const updatedUser=await userModel.findOneAndUpdate({_id: createdUser._id},{cart: {id_cart: newCart._id}}, {new: true});
+                return done(null, updatedUser);
             }
             else{//Si el usuario ya existe, retorna el usuario
                 return done(null, user);
@@ -83,7 +88,7 @@ const initializePassport = () => {
         callbackURL: "http://localhost:8080/api/sessions/googlecallback"
       },
       async (accessToken, refreshToken, profile, cb)=> {
-        console.log(profile);
+        //console.log(profile);
         // userModel.findOrCreate({ googleId: profile.id }, async (err, user) =>{
         //   return cb(err, user);
         // });
@@ -99,13 +104,15 @@ const initializePassport = () => {
                     password: 'Google'//con esta contraseña no se puede loguear, sin embargo identificamos de donde se hizo el login
                 });
                 const createdUser = await userModel.create(newUser);
-                return cb(null, createdUser);
+                const newCart=await cartModel.create({products:[]});
+                const updatedUser=await userModel.findOneAndUpdate({_id: createdUser._id},{cart: {id_cart: newCart._id}}, {new: true});
+                return cb(null, updatedUser);
             }
             else{//Si el usuario ya existe, retorna el usuario
                 return cb(null, user);
             }
         } catch (error) {
-            return cb("Error GithubLogin: "+error);
+            return cb("Error GoogleLogin: "+error);
         }
       }
     ));

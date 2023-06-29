@@ -95,16 +95,19 @@ if (window.location.href.includes('chat')) {
 
 // Add to CART ----------------------------------------------------------------------------
 const postButtons=document.querySelectorAll('.postButton');
+
 postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
     if(e.target.dataset.id===postButton.dataset.id) {
-        addToCart(postButton.dataset.id).then(()=>window.location.href = "http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150");
+        const cid=document.getElementById('cartId').innerText.split(' ')[2]
+        addToCart(postButton.dataset.id,cid).then(()=>window.location.href = `http://localhost:8080/api/carts/${cid}`);
     }
 })})
 
 //Agregar al carrito de ID hardcodeado
-const addToCart= async (pid)=>{
+const addToCart= async (pid,cid)=>{
+
     try {
-        const response= await fetch(`http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150/product/${pid}`,{
+        const response= await fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -129,8 +132,11 @@ deleteButtons.forEach(deleteButton=>{deleteButton.addEventListener('click', (e)=
 
 //Eliminar del carrito de ID hardcodeado
 const deleteFromCart= async (pid)=>{
+//get url
+const cid=window.location.href.split("/").pop();
+console.log(cid);
     try {
-        const response= await fetch(`http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150/product/${pid}`,{
+        const response= await fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`,{
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',

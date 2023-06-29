@@ -25,7 +25,19 @@ const userSchema = new Schema({
   password:{
     type: String,
     required: true
-  }
+  },
+  cart: {
+    type: 
+      {
+        _id: false,
+        id_cart: {
+          type: Schema.Types.ObjectId,
+          ref: "carts",
+        }
+      }
+    ,
+    default: null,
+  },
 });
 
 const userModel=model("users", userSchema)
