@@ -1,5 +1,5 @@
-import { ProductManager, Product } from "../ProductManager.js";
-import productModel from "../models/Products.js";
+import { ProductManager, Product } from "../persistencia/ProductManager.js";
+import productModel from "../persistencia/models/Products.js";
 const port = process.env.PORT;
 
 export const seedProducts = async (req, res) => {

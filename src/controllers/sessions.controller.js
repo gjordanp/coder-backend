@@ -1,5 +1,5 @@
-import userModel from '../models/Users.js';
-import {cartModel} from '../models/Carts.js';
+import userModel from '../persistencia/models/Users.js';
+import {cartModel} from '../persistencia/models/Carts.js';
 
 export const renderRegister = async (req, res) => {
     res.render('register')

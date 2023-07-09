@@ -1,13 +1,12 @@
-import {Router} from 'express';
-import {CartManager} from '../CartManager.js';
-import { cartModel } from '../models/Carts.js';
-import productModel from '../models/Products.js';
+import { Router } from 'express';
+//import { CartManager } from '../CartManager.js';
+import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductOnCart, updateProductQuantityOnCart } from '../controllers/cart.controller.js';
 
-const cartManager = new CartManager('./src/carts.txt','./src/products.txt');
+
 const cartRouter = Router(); //Router para manejo de rutas
 
 //FS -------------------------------------------------------------------------------------------
-
+// const cartManager = new CartManager('./src/carts.txt', './src/products.txt');
 // cartRouter.get('/:cid', async (req, res) => {
 //     const cid= req.params.cid
 //     const cart=await cartManager.getCartById(cid);//obtenemos los productos
@@ -23,114 +22,21 @@ const cartRouter = Router(); //Router para manejo de rutas
 
 
 //MONGO -------------------------------------------------------------------------------------------
-cartRouter.get('/createcart', async (req, res) => {
-    try{
-        const newCart=await cartModel.create({products:[]});
-        res.send(newCart);
-    }
-    catch(error){
-        res.send("ERROR: " + error);
-    }
-    
-});
-cartRouter.get('/', async (req, res) => {
-    try {
-        const cart=await cartModel.find();//obtenemos los carritos
-        res.send(cart);
-    } catch (error) {
-        res.send("ERROR: " + error);
-    }
-    //enviamos los productos
-});
+cartRouter.get('/createcart', createCart);
 
-cartRouter.get('/:cid', async (req, res) => {
-    const cid= req.params.cid
-    try {
-        const cart=await cartModel.findById(cid).populate('products.id_prod').lean();//obtenemos los productos
-        //res.send(cart);
-        res.render('carts',{cart:cart});
-    } catch (error) {
-        res.send("ERROR: " + error);
-    }
-    //enviamos los productos
-});
+cartRouter.get('/', getCarts);
 
-cartRouter.post("/:cid/product/:pid", async (req, res) => {
-    const cid= req.params.cid;
-    const pid= req.params.pid;
-    const { quantity } = req.body //Consulto el dato quantity enviado por postman
-    try {
-        const cart=await cartModel.findById(cid);
-        const product= await productModel.findById(pid);
+cartRouter.get('/:cid', getCartById);
 
-        if(!product){
-            res.send("producto no existe"+product);
-        }
-        //if product is already in cart
-        if(cart.products.find(product=>product.id_prod==pid)){
-        //find cart and product and update incrementing quantity
-            const updatedCart=await cartModel.findOneAndUpdate({_id:cid,"products.id_prod":pid},{$inc:{"products.$.quantity":quantity}},{new:true});
-            res.send(updatedCart);
-        }
-        else{
-            //if product is not in cart, add it
-            const updatedCart=await cartModel.findOneAndUpdate({_id:cid},{$push:{products:{id_prod:pid,quantity:quantity}}},{new:true});
-            res.send(updatedCart);
-        }
-    } catch (error) {
-        res.send( "Error: Cart ID o Product ID no existen\n\n"+error);
-    }
-})
+cartRouter.post("/:cid/product/:pid", addProductOnCart)
 
-cartRouter.delete("/:cid/product/:pid", async (req, res) => {
-    try {
-        const cid= req.params.cid;
-        const pid= req.params.pid;
-        //find cart and delete product
-        const updatedCart=await cartModel.findOneAndUpdate({_id:cid},{$pull:{products:{id_prod:pid}}},{new:true});
-        res.send(updatedCart);
-    } catch (error) {
-        res.send("Error: Cart ID o Product ID no existen\n\n" + error);
-    }
-});
+cartRouter.delete("/:cid/product/:pid", deleteProductOnCart);
 
-cartRouter.delete("/:cid", async (req, res) => {
-    try {
-        const cid= req.params.cid;
-        //find cart and delete products
-        const updatedCart=await cartModel.findOneAndUpdate({_id:cid},{products:[]},{new:true});
-        res.send(updatedCart);
-    } catch (error) {
-        res.send("Error: Cart ID no existe\n\n" + error);
-    }
-});
+cartRouter.delete("/:cid", deleteCart);
 
+cartRouter.put("/:cid", updateProductOnCart);
 
-cartRouter.put("/:cid", async (req, res) => {
-    const cid= req.params.cid;
-    const products=req.body.products;
-    try {
-        //find cart and update products
-        const updatedCart=await cartModel.findOneAndUpdate({_id:cid},{products:products},{new:true});
-        res.send(updatedCart);
-    } catch (error) {
-        res.send("Error: Cart ID o formato del arreglo products incorrectos \n\n" + error);
-    }
-});
-
-cartRouter.put("/:cid/product/:pid", async (req, res) => {
-    const cid= req.params.cid;
-    const pid= req.params.pid;
-    const { quantity } = req.body //Consulto el dato quantity enviado por postman
-    try {
-        //find cart and product and update quantity
-        const updatedCart=await cartModel.findOneAndUpdate({_id:cid,"products.id_prod":pid},{$set:{"products.$.quantity":quantity}},{new:true});
-        res.send(updatedCart);
-
-    } catch (error) {
-        res.send( "Error: Cart ID o Product ID o quantity Incorrectos \n\n"+error);
-    }
-})
+cartRouter.put("/:cid/product/:pid", updateProductQuantityOnCart)
 
 //Otras Rutas
 cartRouter.put("*", async (req, res) => {
