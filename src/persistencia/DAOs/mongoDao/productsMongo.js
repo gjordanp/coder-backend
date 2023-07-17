@@ -1,4 +1,4 @@
-import productModel from '../../mongoDB/models/products.models.js'
+import productModel from '../../mongoDB/models/products.model.js'
 import BasicMongo from './basicMongo.js'
 
 class ProductsMongo extends BasicMongo {

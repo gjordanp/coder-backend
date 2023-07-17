@@ -15,7 +15,7 @@ import { __dirname } from './utils/path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
-
+import ticketModel from './persistencia/mongoDB/models/tickets.model.js';
 
 
 //Configuraciones de Express
@@ -88,5 +88,6 @@ app.use('/api/carts', cartRouter);
 app.use('/chat', chatRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/', homeRouter);
+
 
 

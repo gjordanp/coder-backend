@@ -2,7 +2,7 @@
 <br>
 <h2>Cart ID: {{cart._id}}</h2>
 <br>
-<button onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
+<button onclick="window.location.href='/api/products/'">Productos</button>
 <button onclick="window.location.href='/api/sessions/profile'">Perfil</button>
 <br>
 <br>
@@ -25,4 +25,6 @@
     </li>
     {{/each}}
 </ul>
+<br>
+<button onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
 

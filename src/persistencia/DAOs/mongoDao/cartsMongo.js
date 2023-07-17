@@ -1,4 +1,4 @@
-import cartsModel from '../../mongoDB/models/carts.models.js'
+import cartsModel from '../../mongoDB/models/carts.model.js'
 import BasicMongo from './basicMongo.js'
 
 class CartsMongo extends BasicMongo {

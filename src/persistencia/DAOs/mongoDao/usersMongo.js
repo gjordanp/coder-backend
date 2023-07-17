@@ -1,4 +1,4 @@
-import userModel from '../../mongoDB/models/users.models.js'
+import userModel from '../../mongoDB/models/users.model.js'
 import BasicMongo from './basicMongo.js'
 
 class UsersMongo extends BasicMongo {

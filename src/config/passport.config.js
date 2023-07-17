@@ -3,8 +3,8 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
-import userModel from "../persistencia/mongoDB/models/users.models.js";
-import cartModel from '../persistencia/mongoDB/models/carts.models.js';
+import userModel from "../persistencia/mongoDB/models/users.model.js";
+import cartModel from '../persistencia/mongoDB/models/carts.model.js';
 import { createHash, validatePassword } from "../utils/bcript.js";
 
 const LocalStrategy = local.Strategy;
@@ -88,12 +88,8 @@ const initializePassport = () => {
         callbackURL: "http://localhost:8080/api/sessions/googlecallback"
       },
       async (accessToken, refreshToken, profile, cb)=> {
-        //console.log(profile);
-        // userModel.findOrCreate({ googleId: profile.id }, async (err, user) =>{
-        //   return cb(err, user);
-        // });
         try {
-            console.log(profile);
+            //console.log(profile);
             const user = await userModel.findOne({email:profile._json.email});
             if(!user){ //Si el usuario no existe, lo crea
                 const newUser = new userModel({

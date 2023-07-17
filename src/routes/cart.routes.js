@@ -1,6 +1,6 @@
 import { Router } from 'express';
 //import { CartManager } from '../CartManager.js';
-import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductOnCart, updateProductQuantityOnCart } from '../controllers/cart.controller.js';
+import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductOnCart, updateProductQuantityOnCart, purchaseCart} from '../controllers/cart.controller.js';
 
 
 const cartRouter = Router(); //Router para manejo de rutas
@@ -27,6 +27,8 @@ cartRouter.get('/createcart', createCart);
 cartRouter.get('/', getCarts);
 
 cartRouter.get('/:cid', getCartById);
+
+cartRouter.get('/:cid/purchase', purchaseCart);
 
 cartRouter.post("/:cid/product/:pid", addProductOnCart)
 
