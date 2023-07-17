@@ -1,5 +1,7 @@
-import userModel from '../persistencia/models/Users.js';
-import {cartModel} from '../persistencia/models/Carts.js';
+
+import userService from '../services/user.service.js';
+import CurrentUserDTO from '../persistencia/DTOs/currentUserDTO.js';
+
 
 export const renderRegister = async (req, res) => {
     res.render('register')
@@ -7,19 +9,19 @@ export const renderRegister = async (req, res) => {
 
 export const tryRegister = async (req, res) => {
     try {
-        if(!req.user){
-            return res.status(401).render('errors','usuario no creado');
+        if (!req.user) {
+            return res.status(401).render('errors', 'usuario no creado');
         }
         //Registro correcto, creamos un carrito vacio
-        res.status(200).send({status: "success", payload: req.user});
+        res.status(200).send({ status: "success", payload: req.user });
     } catch (error) {
-        res.status(401).render('errors',{status: "error", message: "Error de Registro"});
+        res.status(401).render('errors', { status: "error", message: "Error de Registro" });
     }
 }
 
 export const failregister = async (req, res) => {
     console.log(req);
-    res.status(500).render('errors', {status: "error", message: "Error de Registro"});
+    res.status(500).render('errors', { status: "error", message: "Error de Registro" });
 }
 
 export const logout = async (req, res) => {
@@ -35,8 +37,8 @@ export const profile = async (req, res) => {
     if (!req.session.user) {
         res.redirect("/");
     }
-    else{
-        res.render('profile', {user: req.session.user})
+    else {
+        res.render('profile', { user: req.session.user })
     }
 }
 
@@ -66,8 +68,8 @@ export const tryLogin = async (req, res) => {
     //     }
     // }
     try {
-        if(!req.user){
-            return res.status(400).render('errors',req.message);
+        if (!req.user) {
+            return res.status(400).render('errors', req.message);
         }
         req.session.user = {
             first_name: req.user.first_name,
@@ -77,10 +79,17 @@ export const tryLogin = async (req, res) => {
         }
         res.status(200).redirect('api/products');
     } catch (error) {
-        res.status(401).render('errors',{status: "error", message: "Login Error"});
+        res.status(401).render('errors', { status: "error", message: "Login Error" });
     }
 }
 export const faillogin = async (req, res) => {
-    
-    res.status(500).render('errors', {status: "error", message: "Credenciales Incorrectas"});
+    res.status(500).render('errors', { status: "error", message: "Credenciales Incorrectas" });
+}
+
+export const currentUser = async (req, res) => {
+    try {
+        return res.status(200).send(new CurrentUserDTO(req.user));
+    } catch (error) {
+        return res.status(500).send({ status: "error", message: "Error obteniendo current user" });
+    }
 }

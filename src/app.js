@@ -4,14 +4,14 @@ import express from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
-import mongoose from 'mongoose'; //Conexion a Mongo
+import './persistencia/mongoDB/configMongo.js';
 import MongoStore from 'connect-mongo'; //Sessiones en Mongo
 import productRouter from './routes/product.routes.js';
 import cartRouter from './routes/cart.routes.js';
 import chatRouter from './routes/chat.routes.js';
 import homeRouter from './routes/home.routes.js';
 import sessionRouter from './routes/sessions.routes.js';
-import { __dirname } from './path.js';
+import { __dirname } from './utils/path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
@@ -59,10 +59,10 @@ app.use(passport.session());
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 
 
-//Conexion a MongoDB Atlas
-mongoose.connect(process.env.URL_MONGODB_ATLAS)
-.then(() => console.log('Conectado a MongoDB Atlas'))
-.catch(error => console.log(error));
+// //Conexion a MongoDB Atlas
+// mongoose.connect(process.env.URL_MONGODB_ATLAS)
+// .then(() => console.log('Conectado a MongoDB Atlas'))
+// .catch(error => console.log(error));
 
 //Escuchar Servidor
 const httpserver=app.listen(port, () => {

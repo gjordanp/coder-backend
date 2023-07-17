@@ -99,6 +99,7 @@ const postButtons=document.querySelectorAll('.postButton');
 postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
     if(e.target.dataset.id===postButton.dataset.id) {
         const cid=document.getElementById('cartId').innerText.split(' ')[2]
+        console.log(cid);
         addToCart(postButton.dataset.id,cid).then(()=>window.location.href = `http://localhost:8080/api/carts/${cid}`);
     }
 })})
@@ -107,7 +108,8 @@ postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
 const addToCart= async (pid,cid)=>{
 
     try {
-        const response= await fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`,{
+        const URL=`http://localhost:8080/api/carts/${cid}/product/${pid}`;
+        const response= await fetch(URL,{
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

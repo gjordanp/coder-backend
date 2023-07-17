@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { renderRegister, tryRegister,failregister, logout, login, tryLogin, faillogin, profile } from '../controllers/sessions.controller.js';
+import { renderRegister, tryRegister,failregister, logout, login, tryLogin, faillogin, profile, currentUser } from '../controllers/sessions.controller.js';
 import passport from 'passport';
 
 const sessionRouter = Router(); 
@@ -51,7 +51,6 @@ sessionRouter.get('/githubcallback',
 });
 
 //Current user
-sessionRouter.get('/current', (req,res)=>{
-    res.send(req.user);
-})
+sessionRouter.get('/current', currentUser);
+
 export default sessionRouter;

@@ -1,13 +1,17 @@
-import { ProductManager, Product } from "../persistencia/ProductManager.js";
-import productModel from "../persistencia/models/Products.js";
+import { ProductManager, Product } from "../persistencia/DAOs/fileDao/ProductManager.js";
+import productService from "../services/product.service.js";
 const port = process.env.PORT;
 
 export const seedProducts = async (req, res) => {
-  const productManager = new ProductManager("./src/productsSeed.txt");
-  const seedProducts = await productManager.getProducts();
-  //console.log(seedProducts);
-  await productModel.insertMany(seedProducts);
-  res.send(await productModel.find());
+  try {
+    const productManager = new ProductManager("../persistencia/DAOs/fileDao/productsSeed.txt");
+    const seedProducts = await productManager.getProducts();
+    //console.log(seedProducts);
+    await productService.insertMany(seedProducts);
+    res.status(200).send(await productService.findAll());
+  } catch (error) {
+    res.status(500).send("ERROR: " + error);
+  }
 };
 
 export const getProducts = async (req, res) => {
@@ -28,7 +32,7 @@ export const getProducts = async (req, res) => {
           : undefined;
       //console.log(queryFail);
 
-      let paginatedProducts = await productModel.paginate(
+      let paginatedProducts = await productService.paginate(
         //Primer parametro: filtro
         objQuery ?? {},
 
@@ -65,25 +69,25 @@ export const getProducts = async (req, res) => {
                         </br>query={\"category\":\"kites\",\"status\":\"true\"}`);
       } else {
         //res.send(paginatedProducts); //enviamos los productos
-        res.render("products", {
+        res.status(200).render("products", {
           pagProducts: paginatedProducts,
           user: req.session.user,
         });
       }
     }
   } catch (error) {
-    res.send("ERROR: " + error);
+    res.status(500).send("ERROR: " + error);
   }
 };
 
 export const getProductById = async (req, res) => {
   try {
     const pid = req.params.pid;
-    const product = await productModel.findById(pid); //obtenemos los productos
-    res.send(product); //enviamos los productos
+    const product = await productService.findById(pid); //obtenemos los productos
+    res.status(200).send(product); //enviamos los productos
   } catch (error) {
     //res.send("ERROR: " + error.message);
-    res.send(error.message);
+    res.status(500).send(error.message);
   }
 };
 
@@ -92,51 +96,31 @@ export const addProduct = async (req, res) => {
     const {title,description,thumbnails,price,code,stock,status,category,} = req.body; //Consulto los datos enviados por postman
     if (!title ||!description ||!code ||!price ||!status ||!category ||!stock) {
       //Si no hay datos
-      res.send("El producto no contiene todos los datos requeridos");
+      res.status(401).send("El producto no contiene todos los datos requeridos");
     } else {
-      const newProduct = new Product( title, description, thumbnails, price, code, stock, status, category);
-      res.send(await productModel.create(newProduct));
+      res.status(200).send(await productService.create(req.body));
     }
   } catch (error) {
-    res.send("ERROR: " + error);
+    res.status(500).send("ERROR: " + error);
   }
 };
 
 export const updateProduct = async (req, res) => {
   try {
     const pid = req.params.pid; //Consulto el id enviado por la url
-    const {
-      title,
-      description,
-      thumbnails,
-      price,
-      code,
-      stock,
-      status,
-      category,
-    } = req.body; //Consulto los datos enviados por postman
-    const updatedObject = {
-      title: title,
-      description: description,
-      thumbnails: thumbnails,
-      price: price,
-      code: code,
-      stock: stock,
-      status: status,
-      category: category,
-    };
-    res.send(await productModel.findByIdAndUpdate(pid, updatedObject)); //return implicito
+    const updatedObject = req.body; //Consulto los datos enviados por postman
+    res.status(200).send(await productService.findByIdAndUpdate(pid, updatedObject)); //return implicito
   } catch (error) {
-    res.send("ERROR: " + error);
+    res.status(500).send("ERROR: " + error);
   }
 };
 
 export const deleteProduct = async (req, res) => {
   try {
     const pid = req.params.pid; //Consulto el id enviado por la url
-    res.send(await productModel.findByIdAndDelete(pid));
+    res.status(200).send(await productService.delete(pid));
   } catch (error) {
-    res.send("ERROR: " + error);
+    res.status(500).send("ERROR: " + error);
   }
 };
 
@@ -149,7 +133,7 @@ export const realTimeProducts = async (req, res) => {
     console.log("Cliente conectado a RealTimeProducts");
 
     //Onload
-    socket.emit("server:onloadProducts", await productModel.find());
+    socket.emit("server:onloadProducts", await productService.findAll());
     //NewProduct
     socket.on("client:newproduct", (data) => {
       newProduct(data);
@@ -170,24 +154,24 @@ export const realTimeProducts = async (req, res) => {
         data.status,
         data.category
       );
-      await productModel.create(newProduct);
-      const updatedProducts = await productModel.find();
+      await productService.create(newProduct);
+      const updatedProducts = await productService.findAll();
       socket.emit("server:updatedProducts", updatedProducts);
     };
 
     const deleteProduct = async (id) => {
-      await productModel.deleteOne({ _id: id });
-      const updatedProducts = await productModel.find();
+      await productService.delete(id);
+      const updatedProducts = await productService.findAll();
       socket.emit("server:updatedProducts", updatedProducts);
     };
   });
 
   //Render
   try {
-    const products = await productModel.find(); //obtenemos los productos
+    const products = await productService.findAll(); //obtenemos los productos
     //const products = await productModel.paginate({}, { limit: 10, page: 1, sort: { price: 1 }, lean: true})
-    res.render("realtimeproducts", { products: products });
+    res.status(200).render("realtimeproducts", { products: products });
   } catch (error) {
-    res.send("ERROR: " + error);
+    res.status(500).send("ERROR: " + error);
   }
 };

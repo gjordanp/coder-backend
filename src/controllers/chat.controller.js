@@ -1,4 +1,4 @@
-import messageModel from '../persistencia/models/Messages.js';
+import messageModel from '../persistencia/mongoDB/models/messajes.models.js';
 
 
 export const getChat = (req, res) => {

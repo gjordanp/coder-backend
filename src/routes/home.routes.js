@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import userModel from '../persistencia/models/Users.js';
+import userModel from '../persistencia/mongoDB/models/users.models.js';
 import {createHash, validatePassword} from '../utils/bcript.js';
 import { get } from 'mongoose';
 

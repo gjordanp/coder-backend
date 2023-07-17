@@ -3,8 +3,8 @@ import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
 import GoogleStrategy from "passport-google-oauth20";
-import userModel from "../persistencia/models/Users.js";
-import { cartModel } from '../persistencia/models/Carts.js';
+import userModel from "../persistencia/mongoDB/models/users.models.js";
+import cartModel from '../persistencia/mongoDB/models/carts.models.js';
 import { createHash, validatePassword } from "../utils/bcript.js";
 
 const LocalStrategy = local.Strategy;

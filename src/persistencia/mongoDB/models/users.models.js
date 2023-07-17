@@ -9,36 +9,36 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true
   },
-  age:{
+  age: {
     type: Number,
     required: true
   },
-  role:{
+  role: {
     type: String,
     default: "user"
   },
-  password:{
+  password: {
     type: String,
     required: true
   },
   cart: {
-    type: 
-      {
-        _id: false,
-        id_cart: {
-          type: Schema.Types.ObjectId,
-          ref: "carts",
-        }
+    type:
+    {
+      _id: false,
+      id_cart: {
+        type: Schema.Types.ObjectId,
+        ref: "carts",
       }
+    }
     ,
     default: null,
   },
 });
 
-const userModel=model("users", userSchema)
+const userModel = model("users", userSchema);
 export default userModel;
