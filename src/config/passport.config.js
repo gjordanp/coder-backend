@@ -26,10 +26,12 @@ const initializePassport = () => {
                     age,
                     password: createHash(password)
                 });
+                
                 const createdUser = await userModel.create(newUser);
+                //console.log(createdUser);
                 //Si todo sale bien, retornamos el usuario creado
                 const newCart=await cartModel.create({products:[]});
-                const updatedUser=await userModel.findOneAndUpdate({_id: req.user._id},{cart: {id_cart: newCart._id}}, {new: true});  
+                const updatedUser=await userModel.findOneAndUpdate({_id: createdUser._id},{cart: {id_cart: newCart._id}}, {new: true});  
                 return done(null, updatedUser);
             } catch (error) {
                 return done("Error al obtener el usuario: " + error);

@@ -1,6 +1,7 @@
 
 import userService from '../services/user.service.js';
 import CurrentUserDTO from '../persistencia/DTOs/currentUserDTO.js';
+import sendMail from '../utils/nodemailer.js';
 
 
 export const renderRegister = async (req, res) => {
@@ -12,7 +13,8 @@ export const tryRegister = async (req, res) => {
         if (!req.user) {
             return res.status(401).render('errors', 'usuario no creado');
         }
-        //Registro correcto, creamos un carrito vacio
+        //Registro correcto, enviamos email y el usuario
+        await sendMail(req.user.email, "Registro exitoso", "Bienvenido a Flykite", "<h1>Bienvenido a Flykite</h1>", null);
         res.status(200).send({ status: "success", payload: req.user });
     } catch (error) {
         res.status(401).render('errors', { status: "error", message: "Error de Registro" });
@@ -43,30 +45,6 @@ export const profile = async (req, res) => {
 }
 
 export const tryLogin = async (req, res) => {
-    // //obtenemos datos de body
-    // const {email, password} = req.body;
-    // if(!email || !password){
-    //     //res.send("No se ingresaron todos los datos");
-    //     res.render('errors', {message: "No se ingresaron todos los inputs del formulario."});
-    // }
-    // else{
-    //     const user=await userModel.findOne({email: email});
-    //     if(user){//Si el usuario ya existe
-    //         if(validatePassword(password, user.password)){
-    //             req.session.user = user;
-    //             res.redirect('api/products');
-    //         }
-    //         else{//Si la contraseña es incorrecta
-    //             res.render('errors', {message: "Contraseña incorrecta."});
-    //             //res.render('errors');
-    //             //res.send("Contraseña incorrecta");
-    //         }
-    //     }
-    //     else{//Si el usuario no existe
-    //         res.render('errors', {message: "El email no existe."});
-    //         //res.send("El usuario no existe");
-    //     }
-    // }
     try {
         if (!req.user) {
             return res.status(400).render('errors', req.message);
@@ -75,9 +53,11 @@ export const tryLogin = async (req, res) => {
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             age: req.user.age,
-            email: req.user.email
+            email: req.user.email,
+            role: req.user.role,
+            cart: req.user.cart
         }
-        res.status(200).redirect('api/products');
+        res.status(200).redirect('/api/products');
     } catch (error) {
         res.status(401).render('errors', { status: "error", message: "Login Error" });
     }

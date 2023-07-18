@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import { renderRegister, tryRegister,failregister, logout, login, tryLogin, faillogin, profile, currentUser } from '../controllers/sessions.controller.js';
 import passport from 'passport';
+import autorization from '../middlewares/autorization.js';
 
 const sessionRouter = Router(); 
 

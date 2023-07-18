@@ -1,6 +1,7 @@
 import { Router } from 'express';
 //import { CartManager } from '../CartManager.js';
 import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductOnCart, updateProductQuantityOnCart, purchaseCart} from '../controllers/cart.controller.js';
+import autorization from '../middlewares/autorization.js';
 
 
 const cartRouter = Router(); //Router para manejo de rutas
@@ -30,7 +31,7 @@ cartRouter.get('/:cid', getCartById);
 
 cartRouter.get('/:cid/purchase', purchaseCart);
 
-cartRouter.post("/:cid/product/:pid", addProductOnCart)
+cartRouter.post("/:cid/product/:pid",autorization('user'), addProductOnCart);
 
 cartRouter.delete("/:cid/product/:pid", deleteProductOnCart);
 

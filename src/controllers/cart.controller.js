@@ -2,7 +2,7 @@ import cartService from '../services/cart.service.js';
 import productService from '../services/product.service.js';
 import ticketService from '../services/ticket.service.js';
 import { getNextSequence } from '../persistencia/mongoDB/models/counters.model.js';
-import { ObjectID } from 'mongoose/lib/schema/index.js';
+import sendMail from '../utils/nodemailer.js';
 
 export const createCart = async (req, res) => {
     try {
@@ -181,8 +181,33 @@ export const purchaseCart = async (req, res) => {
                 amount: purchaseTotal
             });
             if (productsWithoutStock.length > 0) {
+                await sendMail(
+                    req.user.email, 
+                    `Confirmacion de compra #${newTicket.code}`, 
+                    "Compra efectuada exitosamente", 
+                    `<h1>Hemos confirmado tu compra</h1>
+                    <h3>El total de tu compra es de $${newTicket.amount}</h3>
+                    <h3>Los productos que compraste son:</h3>
+                    <ul>
+                        ${newTicket.products.map(product => `<li>${product.id_prod} - ${product.quantity} unidades</li>`)}
+                    </ul>
+                    <h3>Algunos productos no tenian stock suficiente para realizar la compra, por lo que no se agregaron al ticket</h3>
+                    <h3>Gracias por tu compra</h3>`, 
+                    null);
                 res.status(200).json({ message: "Algunos productos no tienen stock suficiente para realizar la compra", ticket: newTicket, productsWithoutStock: productsWithoutStock });
             } else {
+                await sendMail(
+                    req.user.email, 
+                    `Confirmacion de compra #${newTicket.code}`, 
+                    "Compra efectuada exitosamente", 
+                    `<h1>Hemos confirmado tu compra</h1>
+                    <h3>El total de tu compra es de $${newTicket.amount}</h3>
+                    <h3>Los productos que compraste son:</h3>
+                    <ul>
+                        ${newTicket.products.map(product => `<li>${product.id_prod} - ${product.quantity} unidades</li>`)}
+                    </ul>
+                    <h3>Gracias por tu compra</h3>`, 
+                    null);
                 res.status(200).json({ message: "Compra realizada con exito", ticket: newTicket });
             }
         }
