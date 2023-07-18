@@ -14,7 +14,8 @@ export const tryRegister = async (req, res) => {
             return res.status(401).render('errors', 'usuario no creado');
         }
         //Registro correcto, enviamos email y el usuario
-        await sendMail(req.user.email, "Registro exitoso", "Bienvenido a Flykite", "<h1>Bienvenido a Flykite</h1>", null);
+        const sentEmail=await sendMail(req.user.email, "Registro exitoso", "Bienvenido a Flykite", "<h1>Bienvenido a Flykite</h1>", null);
+        console.log("Message sent: %s", sentEmail.messageId);
         res.status(200).send({ status: "success", payload: req.user });
     } catch (error) {
         res.status(401).render('errors', { status: "error", message: "Error de Registro" });
@@ -22,7 +23,6 @@ export const tryRegister = async (req, res) => {
 }
 
 export const failregister = async (req, res) => {
-    console.log(req);
     res.status(500).render('errors', { status: "error", message: "Error de Registro" });
 }
 

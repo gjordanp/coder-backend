@@ -52,6 +52,6 @@ sessionRouter.get('/githubcallback',
 });
 
 //Current user
-sessionRouter.get('/current', currentUser);
+sessionRouter.get('/current',autorization('user'), currentUser);
 
 export default sessionRouter;

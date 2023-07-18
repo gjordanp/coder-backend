@@ -62,7 +62,7 @@ export const addProductOnCart = async (req, res) => {
             const update = { $push: { products: { id_prod: pid, quantity: quantity } } };
             const options = { new: true };
             const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
-            console.log(updatedCart);
+            //console.log(updatedCart);
             res.status(200).send(updatedCart);
         }
     } catch (error) {
