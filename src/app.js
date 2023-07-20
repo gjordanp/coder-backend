@@ -11,6 +11,7 @@ import cartRouter from './routes/cart.routes.js';
 import chatRouter from './routes/chat.routes.js';
 import homeRouter from './routes/home.routes.js';
 import sessionRouter from './routes/sessions.routes.js';
+import userRouter from './routes/user.routes.js';
 import { __dirname } from './utils/path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
@@ -84,6 +85,7 @@ app.use('/', express.static(__dirname +'/public'))
 
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
+app.use('/api/users', userRouter);
 app.use('/chat', chatRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/', homeRouter);

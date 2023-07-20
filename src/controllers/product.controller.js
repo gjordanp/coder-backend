@@ -175,3 +175,12 @@ export const realTimeProducts = async (req, res) => {
     res.status(500).send("ERROR: " + error);
   }
 };
+
+export const getMockProducts = async (req, res) => {
+  try {
+    const products = await productService.mockProducts(100);
+    res.status(200).json({ status: "success", payload: products });
+  } catch (error) {
+    res.status(500).json({ status: "error", payload: error })
+  }
+}
