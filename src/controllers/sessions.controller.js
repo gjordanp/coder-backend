@@ -11,7 +11,7 @@ export const renderRegister = async (req, res) => {
 export const tryRegister = async (req, res) => {
     try {
         if (!req.user) {
-            return res.status(401).render('errors', 'usuario no creado');
+            res.status(401).render('errors', 'usuario no creado');
         }
         //Registro correcto, enviamos email y el usuario
         const sentEmail=await sendMail(req.user.email, "Registro exitoso", "Bienvenido a Flykite", "<h1>Bienvenido a Flykite</h1>", null);
@@ -57,11 +57,14 @@ export const tryLogin = async (req, res) => {
             role: req.user.role,
             cart: req.user.cart
         }
-        res.status(200).redirect('/api/products');
+        //redirenccionar usando 303 cambia el metodo a get, en este caso de post a get
+        //https://stackoverflow.com/questions/33214717/why-post-redirects-to-get-and-put-redirects-to-put
+        res.status(200).redirect(303,'/api/products');
     } catch (error) {
         res.status(401).render('errors', { status: "error", message: "Login Error" });
     }
 }
+
 export const faillogin = async (req, res) => {
     res.status(500).render('errors', { status: "error", message: "Credenciales Incorrectas" });
 }

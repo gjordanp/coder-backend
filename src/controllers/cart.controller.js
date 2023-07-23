@@ -37,7 +37,7 @@ export const getCartById = async (req, res) => {
     }
 };
 
-export const addProductOnCart = async (req, res) => {
+export const addProductOnCart = async (req, res, next) => {
     const cid = req.params.cid;
     const pid = req.params.pid;
     const { quantity } = req.body //Consulto el dato quantity enviado por postman
@@ -66,7 +66,7 @@ export const addProductOnCart = async (req, res) => {
             res.status(200).send(updatedCart);
         }
     } catch (error) {
-        res.status(500).send("Error: Cart ID o Product ID no existen\n\n" + error);
+        next(error);
     }
 };
 

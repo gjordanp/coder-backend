@@ -1,6 +1,10 @@
 import { ProductManager, Product } from "../persistencia/DAOs/fileDao/ProductManager.js";
 import productService from "../services/product.service.js";
 const port = process.env.PORT;
+import CustomError from "../services/errors/CustomError.js";
+import EErrors from "../services/errors/enumError.js";
+import { generateProductErrorInfo } from "../services/errors/infoError.js";
+import { ne } from "@faker-js/faker";
 
 export const seedProducts = async (req, res) => {
   try {
@@ -91,17 +95,24 @@ export const getProductById = async (req, res) => {
   }
 };
 
-export const addProduct = async (req, res) => {
+export const addProduct = async (req, res, next) => {
   try {
     const {title,description,thumbnails,price,code,stock,status,category,} = req.body; //Consulto los datos enviados por postman
     if (!title ||!description ||!code ||!price ||!status ||!category ||!stock) {
       //Si no hay datos
-      res.status(401).send("El producto no contiene todos los datos requeridos");
-    } else {
-      res.status(200).send(await productService.create(req.body));
-    }
+      CustomError.createError({
+        name: "Product creation error",
+        cause: generateProductErrorInfo(req.body),
+        message: "Error trying to create a new product",
+        code: EErrors.INVALID_TYPE_ERROR,
+      }); //Lanzo un error
+      //res.status(401).send("El producto no contiene todos los datos requeridos");
+    } 
+    res.status(200).send(await productService.create(req.body));
   } catch (error) {
-    res.status(500).send("ERROR: " + error);
+    next(error);
+    //https://stackoverflow.com/questions/29700005/express-4-middleware-error-handler-not-being-called
+    //For handling errors that are thrown during asynchronous code execution in Express (versions < 5.x), you need to manually catch and invoke the in-built error handler (or your custom one) using the next() function
   }
 };
 
