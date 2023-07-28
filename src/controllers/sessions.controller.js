@@ -18,6 +18,7 @@ export const tryRegister = async (req, res) => {
         console.log("Message sent: %s", sentEmail.messageId);
         res.status(200).send({ status: "success", payload: req.user });
     } catch (error) {
+        res.logguer.error("Error en tryRegister");
         res.status(401).render('errors', { status: "error", message: "Error de Registro" });
     }
 }
@@ -61,6 +62,7 @@ export const tryLogin = async (req, res) => {
         //https://stackoverflow.com/questions/33214717/why-post-redirects-to-get-and-put-redirects-to-put
         res.status(200).redirect(303,'/api/products');
     } catch (error) {
+        res.logguer.error("Error en tryLogin");
         res.status(401).render('errors', { status: "error", message: "Login Error" });
     }
 }
@@ -73,6 +75,7 @@ export const currentUser = async (req, res) => {
     try {
         return res.status(200).send(new CurrentUserDTO(req.user));
     } catch (error) {
+        res.logguer.error("Error en currentUser");
         return res.status(500).send({ status: "error", message: "Error obteniendo current user" });
     }
 }

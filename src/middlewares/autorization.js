@@ -1,10 +1,12 @@
-import CustomError from "../services/errors/customError.js";
+import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enumError.js";
+
 const autorization = (role) => {
     return (req, res, next) => {
         //console.log("authorization",req.session.user);
         if (!req.session.user) {//Si el usuario no esta logueado
             //return res.status(401).send({ message: "Debes iniciar session para realizar esta acción" });
+            req.logger.error("Usuario no logueado");
             CustomError.createError({ 
                 name: "Unauthenticated", 
                 cause: "User not logged",
@@ -16,6 +18,7 @@ const autorization = (role) => {
             if (req.session.user.role == role) {
                 next();
             } else {
+                req.logger.error("Usuario no autorizado");
                 CustomError.createError({ 
                     name: "Unauthorized", 
                     cause: "User role not allowed",

@@ -16,14 +16,14 @@ import { __dirname } from './utils/path.js';
 //import multer from 'multer';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
-import { error } from 'console';
+import compression from 'express-compression';
 import errorHandler from './middlewares/errors.js';
+import { addLogguer } from './utils/logger.js';
 
 
 //Configuraciones de Express
 export const app = express();
 const port = process.env.PORT;
-
 
 // //Configuracion de Multer
 // const storage = multer.diskStorage({
@@ -58,6 +58,9 @@ app.use(session({ //sessions en mongo atlas
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(compression({brotli:{enabled: true, zlib: {}},}));//Comprimir response con Brotli
+app.use(addLogguer);//Agrego logger a request
+
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 
 // //Conexion a MongoDB Atlas
@@ -91,6 +94,16 @@ app.use('/api/users', userRouter);
 app.use('/chat', chatRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/', homeRouter);
+app.use('/loggerTest', (req, res) => {
+
+  req.logger.debug("Debug");
+  req.logger.http("Http");
+  req.logger.info("Info");
+  req.logger.warning("Warning");
+  req.logger.error("Error");
+  req.logger.fatal("Fatal");
+  res.send("Logger test");
+});//Ruta para evitar error 404 en rutas inexistentes
 
 //Custom Error Handler
 app.use(errorHandler);
