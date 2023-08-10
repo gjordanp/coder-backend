@@ -12,7 +12,7 @@ export const createCart = async (req, res) => {
     }
     catch (error) {
         //res.status(500).json({message: "Error",error});
-        res.logguer.error("Error en createCart");
+        req.logger.error("Error en createCart");
         res.status(500).send("ERROR: " + error);
     }
 };
@@ -24,7 +24,7 @@ export const getCarts = async (req, res) => {
         res.status(200).send(carts);
     } catch (error) {
         //res.status(500).json({message: "Error",error});
-        res.logguer.error("Error en getCarts");
+        req.logger.error("Error en getCarts");
         res.status(500).send("ERROR: " + error);
     }
 };
@@ -35,7 +35,7 @@ export const getCartById = async (req, res) => {
         const cart = await cartService.findByIdAndPopulate(cid, 'products.id_prod');
         res.status(200).render('carts', { cart: cart });
     } catch (error) {
-        res.logguer.error("Error en getCartById");
+        req.logger.error("Error en getCartById");
         res.status(500).send("ERROR: " + error);
     }
 };
@@ -69,7 +69,7 @@ export const addProductOnCart = async (req, res, next) => {
             res.status(200).send(updatedCart);
         }
     } catch (error) {
-        res.logguer.error("Error en addProductOnCart");
+        req.logger.error("Error en addProductOnCart");
         next(error);
     }
 };
@@ -85,7 +85,7 @@ export const deleteProductOnCart = async (req, res) => {
         const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
         res.status(200).send(updatedCart);
     } catch (error) {
-        res.logguer.error("Error en deleteProductOnCart");
+        req.logger.error("Error en deleteProductOnCart");
         res.status(500).send("Error: Cart ID o Product ID no existen\n\n" + error);
     }
 };
@@ -100,7 +100,7 @@ export const deleteCart = async (req, res) => {
         const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
         res.status(200).send(updatedCart);
     } catch (error) {
-        res.logguer.error("Error en deleteCart");
+        req.logger.error("Error en deleteCart");
         res.status(500).send("Error: Cart ID no existe\n\n" + error);
     }
 };
@@ -116,7 +116,7 @@ export const updateProductOnCart = async (req, res) => {
         const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
         res.status(200).send(updatedCart);
     } catch (error) {
-        res.logguer.error("Error en updateProductOnCart");
+        req.logger.error("Error en updateProductOnCart");
         res.status(500).send("Error: Cart ID o formato del arreglo products incorrectos \n\n" + error);
     }
 };
@@ -134,7 +134,7 @@ export const updateProductQuantityOnCart = async (req, res) => {
         res.status(200).send(updatedCart);
 
     } catch (error) {
-        res.logguer.error("Error en updateProductQuantityOnCart");
+        req.logger.error("Error en updateProductQuantityOnCart");
         res.status(500).send("Error: Cart ID o Product ID o quantity Incorrectos \n\n" + error);
     }
 };
@@ -227,7 +227,7 @@ export const purchaseCart = async (req, res) => {
             }
         }
     } catch (error) {
-        res.logguer.error("Error en purchaseCart");
+        req.logger.error("Error en purchaseCart");
         res.status(500).send(error);
     }
 }

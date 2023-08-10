@@ -18,7 +18,7 @@ import { engine } from 'express-handlebars';
 import * as path from 'path';
 import compression from 'express-compression';
 import errorHandler from './middlewares/errors.js';
-import { addLogguer } from './utils/logger.js';
+import { addLogger } from './utils/logger.js';
 
 
 //Configuraciones de Express
@@ -59,7 +59,7 @@ initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(compression({brotli:{enabled: true, zlib: {}},}));//Comprimir response con Brotli
-app.use(addLogguer);//Agrego logger a request
+app.use(addLogger);//Agrego logger a request
 
 //const upload = multer({storage: storage})//metodo de multer para subir archivos
 

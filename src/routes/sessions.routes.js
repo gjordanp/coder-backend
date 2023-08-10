@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { renderRegister, tryRegister,failregister, logout, login, tryLogin, faillogin, profile, currentUser } from '../controllers/sessions.controller.js';
+import { renderRegister, tryRegister,failregister, logout, login, tryLogin, faillogin, profile, currentUser, resetPasswordView, resetPasswordEmail } from '../controllers/sessions.controller.js';
 import passport from 'passport';
 import autorization from '../middlewares/autorization.js';
 
@@ -8,6 +8,9 @@ const sessionRouter = Router();
 // -------------------------------------------------Login sin Passport -----------------------------------------------
 //Ruta api/sessions
 sessionRouter.get('/register', renderRegister);
+sessionRouter.get('/resetpasswordview', resetPasswordView);
+sessionRouter.post('/resetpasswordemail', resetPasswordEmail);
+
 
 //Ruta api/sessions/tryregister
 //sessionRouter.post('/api/sessions/tryregister', tryRegister);

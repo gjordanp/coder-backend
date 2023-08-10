@@ -2,6 +2,7 @@
 import userService from '../services/user.service.js';
 import CurrentUserDTO from '../persistencia/DTOs/currentUserDTO.js';
 import sendMail from '../utils/nodemailer.js';
+import { setPasswordModifiable } from './user.controller.js';
 
 
 export const renderRegister = async (req, res) => {
@@ -15,10 +16,10 @@ export const tryRegister = async (req, res) => {
         }
         //Registro correcto, enviamos email y el usuario
         const sentEmail=await sendMail(req.user.email, "Registro exitoso", "Bienvenido a Flykite", "<h1>Bienvenido a Flykite</h1>", null);
-        console.log("Message sent: %s", sentEmail.messageId);
+        req.logger.info("Message sent: %s", sentEmail.messageId);
         res.status(200).send({ status: "success", payload: req.user });
     } catch (error) {
-        res.logguer.error("Error en tryRegister");
+        req.logger.error("Error en tryRegister");
         res.status(401).render('errors', { status: "error", message: "Error de Registro" });
     }
 }
@@ -62,7 +63,7 @@ export const tryLogin = async (req, res) => {
         //https://stackoverflow.com/questions/33214717/why-post-redirects-to-get-and-put-redirects-to-put
         res.status(200).redirect(303,'/api/products');
     } catch (error) {
-        res.logguer.error("Error en tryLogin");
+        req.logger.error("Error en tryLogin");
         res.status(401).render('errors', { status: "error", message: "Login Error" });
     }
 }
@@ -75,7 +76,37 @@ export const currentUser = async (req, res) => {
     try {
         return res.status(200).send(new CurrentUserDTO(req.user));
     } catch (error) {
-        res.logguer.error("Error en currentUser");
+        req.logger.error("Error en currentUser");
         return res.status(500).send({ status: "error", message: "Error obteniendo current user" });
     }
 }
+
+export const resetPasswordView = async (req, res) => {
+    res.render('resetpassword')
+}
+
+export const resetPasswordEmail = async (req, res) => {
+    try {
+        const user = await userService.findOne({ email: req.body.email });
+        if (!user) {
+            return res.status(400).send({ status: "error", message: "Email no registrado" });
+        }
+        //Se define una duracion fecha actual + 1 hora
+        const date = Date.now() + 3600000;
+        await userService.setPasswordModifiable(user._id, date);//Link de recuperacion de contraseña valido por 1 hora
+
+        const html=`
+        <h1>Recuperar Contraseña</h1>
+        <p>Para recuperar su contraseña ingrese al siguiente link</p>
+        <a href="http://localhost:8080/api/users/${user._id}/resetpasswordnewpass">Recuperar Contraseña</a>
+        `;
+        const sentEmail=await sendMail(req.body.email, "Recuperar Contraseña", "Recupere su contraseña de flykite", html, null); 
+
+        req.logger.info("Message sent: %s", sentEmail.messageId); 
+        return res.status(200).send({ status: "success", message: "Email de recuperacion de contraseña enviado" });      
+    } catch (error) {
+        req.logger.error("Error en resetPasswordEmail");
+        return res.status(500).send({ status: "error", message: "Error enviando email" });
+    }
+}
+

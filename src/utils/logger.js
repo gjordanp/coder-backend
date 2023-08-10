@@ -9,7 +9,7 @@ import { options } from "./commander.js";
 //     ]
 // })
 
-// export const addLogguer = (req, res, next) => {
+// export const addlogger = (req, res, next) => {
 //     req.logger = logger;
 //     req.logger.http(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`);
 //     next();
@@ -35,7 +35,7 @@ const levelOptions = {
 }
 
 
-const devLogger = winston.createLogger({
+export const devLogger = winston.createLogger({
     levels: levelOptions.levels,
     transports: [
         new winston.transports.Console({
@@ -54,7 +54,7 @@ const devLogger = winston.createLogger({
     ]
 })
 
-const prodLogger = winston.createLogger({
+export const prodLogger = winston.createLogger({
     levels: levelOptions.levels,
     transports: [
         new winston.transports.Console({
@@ -73,7 +73,7 @@ const prodLogger = winston.createLogger({
     ]
 })
 
-export const addLogguer = (req, res, next) => {
+export const addLogger = (req, res, next) => {
     //Usamos logger dependiendo del modo de ejecucion
     req.logger = options.mode === "development" ? devLogger : prodLogger;
     next();

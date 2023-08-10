@@ -26,6 +26,10 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  passwordModifiableUntil: {
+    type: Date,
+    default: Date.now,
+  },
   cart: {
     type:
     {

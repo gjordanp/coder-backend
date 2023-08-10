@@ -2,6 +2,7 @@ import { usersMongo } from '../persistencia/DAOs/mongoDao/usersMongo.js';
 import { createHash, validatePassword } from '../utils/bcript.js';
 import { generateUser } from '../utils/faker.js';
 
+
 class UserService {
     async findAll() {
         try {
@@ -13,6 +14,13 @@ class UserService {
     async findById(id) {
         try {
             return await usersMongo.findById(id);
+        } catch (error) {
+            return error;
+        }
+    }
+    async findOne(filter) {
+        try {
+            return await usersMongo.findOne(filter);
         } catch (error) {
             return error;
         }
@@ -52,12 +60,47 @@ class UserService {
             const users = [];
             for (let i = 0; i < quantity; i++) {
                 const user = generateUser();
-                console.log(user);
                 users.push(user);
             }
             return users;
         } catch (error) {
             return error;
+        }
+    }
+    async resetPassword(email, newPassword) {
+        try {
+            const user = await usersMongo.findOne({ email: email });
+            if (!user) {
+                throw new Error("Email no registrado");
+            }
+            if (validatePassword(newPassword, user.password)) {
+                throw new Error("La contraseña no puede ser igual a la anterior");
+            }
+            const hashPassword = createHash(newPassword)
+            const filter = { email: email };
+            const update = { password: hashPassword };
+            const options = { new: true };
+            const updatedUser = await usersMongo.findOneAndUpdate(filter, update, options);
+            return updatedUser;
+            
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async setPasswordModifiable(id, date) {
+        try {
+            return await usersMongo.setPasswordModifiable(id, date);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async setPasswordNotModifiable(user) {
+        try {
+            return await usersMongo.setPasswordModifiable(user._id, Date.now());
+        } catch (error) {
+            return error
         }
     }
 }

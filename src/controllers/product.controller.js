@@ -79,7 +79,7 @@ export const getProducts = async (req, res) => {
       }
     }
   } catch (error) {
-    res.logguer.error("Error en getProducts");
+    req.logger.error("Error en getProducts");
     res.status(500).send("ERROR: " + error);
   }
 };
@@ -91,7 +91,7 @@ export const getProductById = async (req, res) => {
     res.status(200).send(product); //enviamos los productos
   } catch (error) {
     //res.send("ERROR: " + error.message);
-    res.logguer.error("Error en getProductById");
+    req.logger.error("Error en getProductById");
     res.status(500).send(error.message);
   }
 };
@@ -111,7 +111,7 @@ export const addProduct = async (req, res, next) => {
     } 
     res.status(200).send(await productService.create(req.body));
   } catch (error) {
-    res.logguer.error("Error en addProduct");
+    req.logger.error("Error en addProduct");
     next(error);
     //https://stackoverflow.com/questions/29700005/express-4-middleware-error-handler-not-being-called
     //For handling errors that are thrown during asynchronous code execution in Express (versions < 5.x), you need to manually catch and invoke the in-built error handler (or your custom one) using the next() function
@@ -124,7 +124,7 @@ export const updateProduct = async (req, res) => {
     const updatedObject = req.body; //Consulto los datos enviados por postman
     res.status(200).send(await productService.findByIdAndUpdate(pid, updatedObject)); //return implicito
   } catch (error) {
-    res.logguer.error("Error en updateProduct");
+    req.logger.error("Error en updateProduct");
     res.status(500).send("ERROR: " + error);
   }
 };
@@ -134,7 +134,7 @@ export const deleteProduct = async (req, res) => {
     const pid = req.params.pid; //Consulto el id enviado por la url
     res.status(200).send(await productService.delete(pid));
   } catch (error) {
-    res.logguer.error("Error en deleteProduct");
+    req.logger.error("Error en deleteProduct");
     res.status(500).send("ERROR: " + error);
   }
 };
@@ -187,7 +187,7 @@ export const realTimeProducts = async (req, res) => {
     //const products = await productModel.paginate({}, { limit: 10, page: 1, sort: { price: 1 }, lean: true})
     res.status(200).render("realtimeproducts", { products: products });
   } catch (error) {
-    res.logguer.error("Error en realTimeProducts");
+    req.logger.error("Error en realTimeProducts");
     res.status(500).send("ERROR: " + error);
   }
 };
@@ -197,7 +197,7 @@ export const getMockProducts = async (req, res) => {
     const products = await productService.mockProducts(100);
     res.status(200).json({ status: "success", payload: products });
   } catch (error) {
-    res.logguer.error("Error en getMockProducts");
+    req.logger.error("Error en getMockProducts");
     res.status(500).json({ status: "error", payload: error })
   }
 }

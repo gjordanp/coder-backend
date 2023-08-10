@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import 'dotenv/config';
+import { devLogger } from './logger.js';
 
 const email = process.env.GOOGLE_MAILER_EMAIL;
 const password = process.env.GOOGLE_MAILER_PASSWORD;
@@ -23,11 +24,11 @@ const sendMail = async (to, subject, text, html, attachments) => {
             html: html,
             attachments: attachments
         });
-        console.log("Message sent: %s", info.messageId);
+        devLogger.info("Message sent: " + info.messageId);
         return true;
 
     } catch (error) {
-        console.log(error);
+        devLogger.error(error);
         return false;
     }
 };

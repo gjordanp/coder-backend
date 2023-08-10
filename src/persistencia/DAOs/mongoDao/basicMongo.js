@@ -18,6 +18,13 @@ export default class BasicMongo {
             return error;
         }
     }
+    async findOne(filter) {
+        try {
+            return await this.model.findOne(filter);
+        } catch (error) {
+            return error;
+        }
+    }
     async findByIdAndPopulate(id, populateStr) {
         try {
             return await this.model.findById(id).populate(populateStr).lean();
