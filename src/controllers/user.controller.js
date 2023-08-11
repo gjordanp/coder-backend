@@ -87,3 +87,14 @@ const setPasswordNotModifiable = async (user) => {
         return error
     }
 }
+
+export const changePremiumRole = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await userService.changePremiumRole(id);
+        res.status(200).json({status:'success', payload: user});
+    } catch (error) {
+        req.logger.error("Error en changePremiumRole");
+        res.status(500).json({status:'error', payload: error});
+    }
+}

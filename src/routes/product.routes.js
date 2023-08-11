@@ -14,10 +14,10 @@ productRouter.get("/realtimeproducts", realTimeProducts);
 
 productRouter.get("/:pid", getProductById);
 
-productRouter.post("/", autorization('admin'), addProduct);
+productRouter.post("/", autorization('admin', 'premium'), addProduct);
 
-productRouter.put("/:pid", autorization('admin'), updateProduct);
+productRouter.put("/:pid", autorization('admin', 'premium'), updateProduct);
 
-productRouter.delete("/:pid", autorization('admin'), deleteProduct);
+productRouter.delete("/:pid", autorization('admin', 'premium'), deleteProduct);
 
 export default productRouter;

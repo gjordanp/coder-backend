@@ -3,6 +3,8 @@ import productService from '../services/product.service.js';
 import ticketService from '../services/ticket.service.js';
 import { getNextSequence } from '../persistencia/mongoDB/models/counters.model.js';
 import sendMail from '../utils/nodemailer.js';
+import EErrors from '../services/errors/enumError.js';
+import CustomError from '../services/errors/CustomError.js';
 
 export const createCart = async (req, res) => {
     try {
@@ -58,6 +60,14 @@ export const addProductOnCart = async (req, res, next) => {
             const options = { new: true };
             const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
             res.status(200).send(updatedCart);
+        }
+        if(req.session.user.role == "premium" && product.owner == req.session.user.email){
+            CustomError.createError({
+                name: "Add to cart product error",
+                cause: "User can't add owned product to cart",
+                message: "Error trying to add product to cart",
+                code: EErrors.AUTORIZATION_ERROR,
+            }); //Lanzo un error
         }
         else {
             //if product is not in cart, add it

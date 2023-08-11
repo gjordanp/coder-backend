@@ -31,7 +31,7 @@ cartRouter.get('/:cid', getCartById);
 
 cartRouter.get('/:cid/purchase', purchaseCart);
 
-cartRouter.post("/:cid/product/:pid",autorization('user'), addProductOnCart);
+cartRouter.post("/:cid/product/:pid",autorization('user','premium'), addProductOnCart);
 
 cartRouter.delete("/:cid/product/:pid", deleteProductOnCart);
 

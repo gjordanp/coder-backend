@@ -32,6 +32,10 @@ const productSchema = new Schema({
     default: true,
   },
   thumbnails: [],
+  owner:{
+    type:String,
+    default:"admin"
+  }
 });
 
 productSchema.plugin(paginate);//agrega el metodo paginate a todos los modelos

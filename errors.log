@@ -42,3 +42,22 @@ error: Error enviando email de actualizacion de contraseña
 error: Error en setPasswordNotModifiable
 error: undefined {"code":"ERR_HTTP_HEADERS_SENT"}
 error: El link ha caducado {"status":"error"}
+error: Usuario no autorizado
+error: Usuario no autorizado
+error: Error en addProductOnCart
+error: Usuario no logueado
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Usuario no logueado
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Error en addProductOnCart
+error: Usuario no autorizado
+error: Usuario no autorizado
+error: Usuario no logueado
+error: Usuario no logueado
+error: Error en deleteProduct

@@ -1,7 +1,7 @@
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enumError.js";
 
-const autorization = (role) => {
+const autorization = (role1, role2) => {
     return (req, res, next) => {
         //console.log("authorization",req.session.user);
         if (!req.session.user) {//Si el usuario no esta logueado
@@ -15,7 +15,7 @@ const autorization = (role) => {
             });
 
         } else {//Si el usuario esta logueado
-            if (req.session.user.role == role) {
+            if (req.session.user.role == role1 || req.session.user.role == role2) {
                 next();
             } else {
                 req.logger.error("Usuario no autorizado");

@@ -13,5 +13,15 @@ class UsersMongo extends BasicMongo {
             return error;
         }
     }
+    async changePremiumRole(id) {
+        try {
+            const user= await userModel.findById(id);
+            const role = user.role == "premium" ? "user" : "premium";
+            const updatedUser = await userModel.findByIdAndUpdate(id, {role:role}, {new: true});
+            return updatedUser;
+        } catch (error) {
+            return error;
+        }
+    }
 }
 export const usersMongo = new UsersMongo(userModel);

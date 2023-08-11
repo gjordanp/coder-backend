@@ -109,7 +109,9 @@ export const addProduct = async (req, res, next) => {
       }); //Lanzo un error
       //res.status(401).send("El producto no contiene todos los datos requeridos");
     } 
-    res.status(200).send(await productService.create(req.body));
+    const obj={...req.body, owner: req.session.user.email};
+    console.log(obj);
+    res.status(200).send(await productService.create(obj));
   } catch (error) {
     req.logger.error("Error en addProduct");
     next(error);
@@ -118,24 +120,45 @@ export const addProduct = async (req, res, next) => {
   }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   try {
     const pid = req.params.pid; //Consulto el id enviado por la url
     const updatedObject = req.body; //Consulto los datos enviados por postman
+
+    if(req.session.user.role == "premium"){
+      const product = await productService.findById(pid);
+      if(product.owner != req.session.user.email){
+        CustomError.createError({
+          name: "Product update error",
+          cause: "User not allowed to update this product",
+          message: "Error trying to update a product",
+          code: EErrors.INVALID_TYPE_ERROR,
+        }); //Lanzo un error
+      }
+    }
     res.status(200).send(await productService.findByIdAndUpdate(pid, updatedObject)); //return implicito
   } catch (error) {
     req.logger.error("Error en updateProduct");
-    res.status(500).send("ERROR: " + error);
+    next(error);
   }
 };
 
-export const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res, next) => {
   try {
     const pid = req.params.pid; //Consulto el id enviado por la url
+    const product = await productService.findById(pid);
+    if(req.session.user.role == "premium" & product.owner != req.session.user.email){
+      CustomError.createError({
+        name: "Product delete error",
+        cause: "User not allowed to delete products from other users",
+        message: "Error trying to delete a product",
+        code: EErrors.INVALID_TYPE_ERROR,
+      }); //Lanzo un error
+    }
     res.status(200).send(await productService.delete(pid));
   } catch (error) {
     req.logger.error("Error en deleteProduct");
-    res.status(500).send("ERROR: " + error);
+    next(error);
   }
 };
 
@@ -169,7 +192,7 @@ export const realTimeProducts = async (req, res) => {
         data.status,
         data.category
       );
-      await productService.create(newProduct);
+      await productService.create({...newProduct, owner: req.session.user.email});
       const updatedProducts = await productService.findAll();
       socket.emit("server:updatedProducts", updatedProducts);
     };

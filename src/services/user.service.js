@@ -103,6 +103,14 @@ class UserService {
             return error
         }
     }
+
+    async changePremiumRole(id) {
+        try {
+            return await usersMongo.changePremiumRole(id);
+        } catch (error) {
+            return error;
+        }
+    }
 }
 
 const userService = new UserService();
