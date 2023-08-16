@@ -20,6 +20,8 @@ import compression from 'express-compression';
 import errorHandler from './middlewares/errors.js';
 import { addLogger } from './utils/logger.js';
 
+import { serveSwagger, setupSwagger } from './utils/swagger.js';
+
 
 //Configuraciones de Express
 export const app = express();
@@ -104,6 +106,9 @@ app.use('/loggerTest', (req, res) => {
   req.logger.fatal("Fatal");
   res.send("Logger test");
 });//Ruta para evitar error 404 en rutas inexistentes
+
+//Ruta para documentacion de API usando Swagger
+app.use('/apidocs', serveSwagger, setupSwagger);
 
 //Custom Error Handler
 app.use(errorHandler);

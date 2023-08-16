@@ -1,7 +1,8 @@
 import { Router } from 'express';
 //import { CartManager } from '../CartManager.js';
-import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductOnCart, updateProductQuantityOnCart, purchaseCart} from '../controllers/cart.controller.js';
-import autorization from '../middlewares/autorization.js';
+import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductsOnCart, updateProductQuantityOnCart, purchaseCart} from '../controllers/cart.controller.js';
+import authz from '../middlewares/autorization.js';
+import auth from '../middlewares/authentication.js';
 
 
 const cartRouter = Router(); //Router para manejo de rutas
@@ -29,17 +30,17 @@ cartRouter.get('/', getCarts);
 
 cartRouter.get('/:cid', getCartById);
 
-cartRouter.get('/:cid/purchase', purchaseCart);
+cartRouter.get('/:cid/purchase', auth(), purchaseCart);
 
-cartRouter.post("/:cid/product/:pid",autorization('user','premium'), addProductOnCart);
+cartRouter.post("/:cid/product/:pid", auth(), authz('user','premium'), addProductOnCart);
 
-cartRouter.delete("/:cid/product/:pid", deleteProductOnCart);
+cartRouter.delete("/:cid/product/:pid", auth(), deleteProductOnCart);
 
-cartRouter.delete("/:cid", deleteCart);
+cartRouter.delete("/:cid", auth(), authz('admin'), deleteCart);
 
-cartRouter.put("/:cid", updateProductOnCart);
+cartRouter.put("/:cid", auth(), updateProductsOnCart);
 
-cartRouter.put("/:cid/product/:pid", updateProductQuantityOnCart)
+cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart)
 
 //Otras Rutas
 cartRouter.put("*", async (req, res) => {

@@ -115,7 +115,7 @@ export const deleteCart = async (req, res) => {
     }
 };
 
-export const updateProductOnCart = async (req, res) => {
+export const updateProductsOnCart = async (req, res) => {
     const cid = req.params.cid;
     const products = req.body.products;
     try {
