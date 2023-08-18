@@ -1,0 +1,208 @@
+paths:
+  /api/products/:
+    get:
+      summary: Obtener todos los productos
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    post:
+      summary: Crear un producto
+      tags:
+        - Products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /api/products/mockingproducts:
+    get:
+      summary: Obtener productos de ejemplo
+      tags:
+        - Products
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto
+          schema:
+            type: string
+            example: 648534cf7a11753465d0b168
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    put:
+      summary: Actualizar un producto por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto
+          schema:
+            type: string
+            example: 648534cf7a11753465d0b168
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    delete:
+      summary: Eliminar un producto por su id
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          description: id del producto
+          schema:
+            type: string
+            example: 648534cf7a11753465d0b168
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+        code:
+          type: string
+        stock:
+          type: number
+        status:
+          type: string
+        category:
+          type: string
+        owner:
+          type: string
+      example:
+        _id: 648534cf7a11753465d0b168
+        title: REBEL SLS
+        description: No matter how you choose to ride, the Rebel SLS has a well-deserved legendary status! Easy to jump.
+        code: 9
+        category: kites
+        price: 1770
+        stock: 15
+        status: true
+        thumbnails: [https://cdn.boards-and-more.com/system/product_picture_gallery_pictures/files/62c5/60e6/cc9d/9200/e567/124f/xlarge/REBEL23_C05.png?1657102530]
+        owner: "gjordanp@gmail.com"
+    UpdateProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+        price:
+          type: number
+        code:
+          type: string
+        stock:
+          type: number
+        status:
+          type: string
+        category:
+          type: string
+      example:
+        title: REBEL SLS
+        description: No matter how you choose to ride, the Rebel SLS has a well-deserved legendary status! Easy to jump.
+        code: 9
+        category: kites
+        price: 1770
+        stock: 15
+        status: true
+        thumbnails: [https://cdn.boards-and-more.com/system/product_picture_gallery_pictures/files/62c5/60e6/cc9d/9200/e567/124f/xlarge/REBEL23_C05.png?1657102530]

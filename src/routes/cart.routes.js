@@ -30,17 +30,23 @@ cartRouter.get('/', getCarts);
 
 cartRouter.get('/:cid', getCartById);
 
+cartRouter.put("/:cid", auth(), updateProductsOnCart);
+
+cartRouter.delete("/:cid", auth(), authz('admin'), deleteCart);
+
 cartRouter.get('/:cid/purchase', auth(), purchaseCart);
 
 cartRouter.post("/:cid/product/:pid", auth(), authz('user','premium'), addProductOnCart);
 
+cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart)
+
 cartRouter.delete("/:cid/product/:pid", auth(), deleteProductOnCart);
 
-cartRouter.delete("/:cid", auth(), authz('admin'), deleteCart);
 
-cartRouter.put("/:cid", auth(), updateProductsOnCart);
 
-cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart)
+
+
+
 
 //Otras Rutas
 cartRouter.put("*", async (req, res) => {

@@ -17,37 +17,13 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  /api/carts/{id}:
+  /api/carts/{cid}:
     get:
       tags:
         - Carts
-      summary: Obtener un carrito por id
+      summary: Obtener un carrito por su id
       parameters:
-        - name: id
-          in: path
-          description: id del carrito
-          required: true
-          type: string
-          example: 646edc7fe82ae1241a0fe150
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad Request
-        '401':
-          description: Unauthorized
-        '403':
-          description: Forbidden
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-    delete:
-      tags:
-        - Carts
-      summary: Eliminar un carrito por id
-      parameters:
-        - name: id
+        - name: cid
           in: path
           description: id del carrito
           required: true
@@ -69,7 +45,7 @@ paths:
     put:
       tags:
         - Carts
-      summary: Actualizar todos los productos del carrito por id
+      summary: Actualizar todos los productos del carrito por su id
       parameters:
         - name: id
           in: path
@@ -112,3 +88,155 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar un carrito por su id
+      parameters:
+        - name: id
+          in: path
+          description: id del carrito
+          required: true
+          type: string
+          example: 646edc7fe82ae1241a0fe150
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /api/carts/{cid}/purchase:
+    get:
+      tags:
+        - Carts
+      summary: Comprar un carrito por su id
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          type: string
+          example: 646edc7fe82ae1241a0fe150
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  /api/carts/{cid}/product/{pid}:
+    post: 
+      tags:
+        - Carts
+      summary: Agregar un producto "pid" al carrito "cid"
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          type: string
+          example: 646edc7fe82ae1241a0fe150
+        - name: pid
+          in: path
+          description: id del producto
+          required: true
+          type: string
+          example: 648534cf7a11753465d0b176
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    put:
+      tags:
+        - Carts
+      summary: Actualizar la cantidad de un producto "pid" del carrito "cid"
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          type: string
+          example: 646edc7fe82ae1241a0fe150
+        - name: pid
+          in: path
+          description: id del producto
+          required: true
+          type: string
+          example: 648534cf7a11753465d0b176
+        - name: body
+          in: body
+          description: body del carrito
+          required: true
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+            example:
+              quantity: 2
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+    delete: 
+      tags:
+        - Carts
+      summary: Borrar un producto "pid" del carrito "cid"
+      parameters:
+        - name: cid
+          in: path
+          description: id del carrito
+          required: true
+          type: string
+          example: 646edc7fe82ae1241a0fe150
+        - name: pid
+          in: path
+          description: id del producto
+          required: true
+          type: string
+          example: 648534cf7a11753465d0b176
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+  

@@ -8,13 +8,13 @@ productRouter.get("/seedproducts", seedProducts);
 
 productRouter.get("/", getProducts);
 
+productRouter.post("/", authz('admin', 'premium'), addProduct);
+
 productRouter.get("/mockingproducts", getMockProducts);
 
 productRouter.get("/realtimeproducts", realTimeProducts);
 
 productRouter.get("/:pid", getProductById);
-
-productRouter.post("/", authz('admin', 'premium'), addProduct);
 
 productRouter.put("/:pid", authz('admin', 'premium'), updateProduct);
 
