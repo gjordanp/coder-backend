@@ -6,6 +6,7 @@ import { get } from 'mongoose';
 const homeRouter = Router(); 
 
 homeRouter.get('/', async (req,res)=>{
+    //console.log(req.hostname+":"+req.socket.localPort);
     if (!req.session.user) {
         res.redirect("/api/sessions/login");
     }
