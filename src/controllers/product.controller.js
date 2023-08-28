@@ -110,7 +110,7 @@ export const addProduct = async (req, res, next) => {
       //res.status(401).send("El producto no contiene todos los datos requeridos");
     } 
     const obj={...req.body, owner: req.session.user.email};
-    console.log(obj);
+    //console.log(obj);
     res.status(200).send(await productService.create(obj));
   } catch (error) {
     req.logger.error("Error en addProduct");
@@ -168,7 +168,7 @@ export const realTimeProducts = async (req, res) => {
   //Conexion a socket.io
   io.on("connection", async (socket) => {
     //cuando se establece la conexion envio un mensaje
-    console.log("Cliente conectado a RealTimeProducts");
+    //console.log("Cliente conectado a RealTimeProducts");
 
     //Onload
     socket.emit("server:onloadProducts", await productService.findAll());

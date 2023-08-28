@@ -5,7 +5,7 @@ export const getChat = (req, res) => {
     const io=req.io;
     //Conexion a socket.io
     io.on('connection', async(socket)=>{//cuando se establece la conexion envio un mensaje
-        console.log('Cliente conectado a Chat');
+        //console.log('Cliente conectado a Chat');
         
         socket.on('client:messageSent', async (data)=>{
           await messageModel.create(data);

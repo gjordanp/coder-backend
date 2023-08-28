@@ -10,8 +10,8 @@ import { options } from '../utils/commander.js';
 
 
 const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite2.azurewebsites.net/' : `http://localhost:${process.env.PORT}`;
-
+const domain = enviroment === 'production' ? 'https://flykite2.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
+//console.log(domain);
 const initializePassport = () => {
     
     passport.use('register', new LocalStrategy(
