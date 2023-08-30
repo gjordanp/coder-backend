@@ -1,31 +1,14 @@
-import { expect } from "chai";
-import supertest from "supertest";
-import { options } from "../../src/utils/commander.js"
-import mongoose from "mongoose";
-import 'dotenv/config';
-// import {} from "../setup.test.js"
-
-const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite2.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
-const request = supertest(domain);
-
-mongoose.connect(process.env.URL_MONGODB_ATLAS);
+import {request, AdminCookie} from "../setup.test.js"
+import {expect} from "chai"
 
 
 
 describe("Test Routes Carts", async function (){
-    this.timeout(8000);
-
-    before(async function () {
-        const mockUser = {
-            email:"adminCoder@coder.com",
-            password: "adminCoder123"
-        }
-        await request.post('/api/sessions/trylogin').send(mockUser).set('session',{user:{role:'admin'}});//login with admin role
-    });
 
     it('GET /api/carts/  Get all carts', async function () {
         const response = await request.get('/api/carts/');
+
+        //console.log(response.headers);
         expect(response.statusCode).to.be.eql(200);
     });
 
@@ -43,10 +26,7 @@ describe("Test Routes Carts", async function (){
     });
 
     it('DELETE /api/carts/:id  Delete cart by id', async function () {
-
-        //test route set
-        const response = await request.delete(`/api/carts/${newCart._id}`);
-        //test a route that requires admin role
+        const response = await request.delete(`/api/carts/${newCart._id}`).set('Cookie', `${AdminCookie.name}=${AdminCookie.value}`);//pasamos la cookie con la autenticacion
         expect(response.statusCode).to.be.eql(200);
     });
 

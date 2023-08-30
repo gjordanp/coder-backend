@@ -8,7 +8,7 @@
     "start": "node src/app.js --mode production",
     "dev": "nodemon src/app.js --mode development",
     "debug": "node --inspect src/app.js",
-    "test": "mocha test/**/*.test.js"
+    "test": "mocha test/**/*.test.js --file test/setup.test.js --timeout 6000"
   },
   "repository": {
     "type": "git",

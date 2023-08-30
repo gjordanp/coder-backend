@@ -1,19 +1,8 @@
-import { expect } from "chai";
-import supertest from "supertest";
-import { options } from "../../src/utils/commander.js"
-import mongoose from "mongoose";
-import 'dotenv/config';
+import {request} from "../setup.test.js"
+import {expect} from "chai"
 import userModel from "../../src/persistencia/mongoDB/models/users.model.js";
-// import {} from "../setup.test.js"
-
-const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite2.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
-const request = supertest(domain);
-
-mongoose.connect(process.env.URL_MONGODB_ATLAS);
 
 describe("Test Routes Sessions", async function (){
-   this.timeout(8000);
 
     it('POST /api/sessions/tryregister  Register Successfull', async function () {
         const mockUser = {
@@ -74,10 +63,6 @@ describe("Test Routes Sessions", async function (){
         // console.log(response);
         // console.log(response.headers);
         expect(response.headers.location).to.be.eql('faillogin');
-    });
-
-    after(async function(){
-        await mongoose.connection.close();
     });
 
 })
