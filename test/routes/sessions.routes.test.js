@@ -15,6 +15,7 @@ describe("Test Routes Sessions", async function (){
         const response = await request.post('/api/sessions/tryregister').send(mockUser);
         // console.log(response.statusCode);
         // console.log(response.body);
+        expect(response).to.be.ok;
         expect(response.statusCode).to.be.eql(200);
         await userModel.deleteOne({email: "namelastname@test.cl"})
     });
@@ -30,6 +31,7 @@ describe("Test Routes Sessions", async function (){
         const response = await request.post('/api/sessions/tryregister').send(mockUser);
         // console.log(response.statusCode);
         // console.log(response.body);
+        expect(response).to.be.ok;
         expect(response.statusCode).to.be.eql(302);
     });
 
@@ -39,7 +41,7 @@ describe("Test Routes Sessions", async function (){
             password: "adminCoder123"
         }
         const response = await request.post('/api/sessions/trylogin').send(mockUser);
-
+        expect(response).to.be.ok;
         expect(response.statusCode).to.be.eql(303); //303 porque redirecciona a /api/products
     });
 
@@ -51,6 +53,7 @@ describe("Test Routes Sessions", async function (){
         const response = await request.post('/api/sessions/trylogin').send(mockUser);
         // console.log(response);
         // console.log(response.headers);
+        expect(response).to.be.ok;
         expect(response.headers.location).to.be.eql('faillogin');
     });
 
@@ -62,6 +65,7 @@ describe("Test Routes Sessions", async function (){
         const response = await request.post('/api/sessions/trylogin').send(mockUser);
         // console.log(response);
         // console.log(response.headers);
+        expect(response).to.be.ok;
         expect(response.headers.location).to.be.eql('faillogin');
     });
 
