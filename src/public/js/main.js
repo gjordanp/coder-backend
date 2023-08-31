@@ -105,23 +105,23 @@ postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
 })})
 
 //Agregar al carrito de ID hardcodeado
-const addToCart= async (pid,cid)=>{
+// const addToCart= async (pid,cid)=>{
 
-    try {
-        const URL=`http://localhost:8080/api/carts/${cid}/product/${pid}`;
-        const response= await fetch(URL,{
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"quantity": 1}),
-        });
-        //console.log('Completed!', response);
-    } catch (error) {
-        console.error(`Error: ${error}`);
-    }
-};
+//     try {
+//         const URL=`http://localhost:8080/api/carts/${cid}/product/${pid}`;
+//         const response= await fetch(URL,{
+//             method: 'POST',
+//             headers: {
+//                 'Accept': 'application/json',
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({"quantity": 1}),
+//         });
+//         //console.log('Completed!', response);
+//     } catch (error) {
+//         console.error(`Error: ${error}`);
+//     }
+// };
 
 //Delete from CART ----------------------------------------------------------------------------
 const deleteButtons=document.querySelectorAll('.deleteButton');

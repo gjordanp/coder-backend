@@ -1,20 +1,22 @@
 <div class="container">
-    <h1>Bienvenido {{user.first_name}}</h1>
-    <p>Apellido: {{user.last_name}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>Edad: {{user.age}}</p>
-    <p>Rol: {{user.role}}</p>
-    <p id="cartId">Cart Id: {{user.cart.id_cart}}</p>
-    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/logout'">Cerrar
-        Session</button>
+    <div class="mt-4 p-2 gap-0 lh-1">
+        <h1>Bienvenido {{user.first_name}}</h1>
+        <p>Apellido: {{user.last_name}}</p>
+        <p>Email: {{user.email}}</p>
+        <p>Edad: {{user.age}}</p>
+        <p>Rol: {{user.role}}</p>
+        <p id="cartId">Cart Id: {{user.cart.id_cart}}</p>
+        <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/logout'">Cerrar
+            Session</button>
+    </div>
     <br />
-    <h1>Productos</h1>
-    <br>
-    <h2>Status: {{pagProducts.status}}</h2>
-    <br>
-    <button class="btn btn-outline-primary"
-        onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
-    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+    <div class="p-2">
+        <h2>Productos</h2>
+        <h3>Status: {{pagProducts.status}}</h3>
+        <button class="btn btn-outline-primary"
+            onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
+        <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+    </div>
     <ul class="pagination justify-content-center mt-3">
         {{#if pagProducts.hasPrevPage}}
         <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>Anterior</a></li>
@@ -33,25 +35,39 @@
 
     <ul id="docs" class="d-flex justify-content-center flex-wrap gap-4 p-0">
         {{#each pagProducts.docs}}
-        <li class="card" style="width: 20rem;">
+        <li class="card " style="width: 19rem;">
             <img src={{this.thumbnails}}[0] class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">{{this.title}}</h5>
-                    <p><strong>id:</strong> {{this._id}}</p>
-                    <p><strong>description:</strong>{{this.description}}</p>
-                    <p><strong>price:</strong> {{this.price}}</p>
-                    <p><strong>code:</strong> {{this.code}}</p>
-                    <p><strong>stock:</strong> {{this.stock}}</p>
-                    <p><strong>category:</strong> {{this.category}}</p>
-                    <br>
-                    <button data-id={{this._id}} class="postButton btn btn-primary bottom-0" >Agregar 1 producto al
-                    carrito</button>
-            </div>
+            <ul class="card-body d-flex align-items-start flex-column list-unstyled gap-1">
+                <li class="card-title fs-2">{{this.title}}</li>
+                <li><strong>id:</strong> {{this._id}}</li>
+                {{!-- <li class="w-100 h-25 overflow-auto" data-bs-title="asdgdf">
+                    <strong>description:</strong>{{this.description}}</li> --}}
+                <li class="w-100 text-truncate" data-bs-title="asdgdf"><strong>description:</strong>{{this.description}}
+                </li>
+                <li><strong>price:</strong> {{this.price}}</li>
+                <li><strong>code:</strong> {{this.code}}</li>
+                <li><strong>stock:</strong> {{this.stock}}</li>
+                <li><strong>category:</strong> {{this.category}}</li>
+                <br>
+
+
+                <form action="/api/carts/{{../user.cart.id_cart}}/product/{{this._id}}" method="post"
+                    class="w-100 d-flex flex-column gap-2 mt-auto p-3 border rounded">
+                    <label for="quantity">Cantidad:</label>
+                    <input type="number" id="quantity" value="1" name="quantity" min="1" max="5" class="w-25">
+                    <input type="submit" class="btn btn-primary" value="Agregar al carrito" onclick="
+                        window.location.href='/api/carts/{{../user.cart.id_cart}}'
+                        ">
+                </form>
+                {{!-- <br>
+                <button data-id={{this._id}} class="postButton btn btn-primary bottom-0">Agregar 1 producto al
+                    carrito</button> --}}
+            </ul>
         </li>
 
         {{/each}}
     </ul>
-        <ul class="pagination justify-content-center">
+    <ul class="pagination justify-content-center">
         {{#if pagProducts.hasPrevPage}}
         <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>Anterior</a></li>
         <li class="page-item"><a class="page-link" href={{pagProducts.prevLink}}>{{pagProducts.prevPage}}</a></li>
