@@ -1,10 +1,11 @@
-<div id="chatDiv">
-<h2>Chat</h2>
-<div>
-    <input type="text" id="chatBox" placeholder="Ingresa un mensaje">
-    <button id="bottonChat">Enviar</button>
-</div>
-<div>
-    <p id="parrafoMensajes"></p>
-</div>
+<div class="d-flex flex-column" style="height: 100dvh;">
+    {{>navbar user=user}}
+    <div class="container mt-4 mb-5 d-flex flex-column align-content-center justify-content-center gap-2 flex-grow-1"
+        id="chatDiv">
+        <h2>Chat</h2>
+        <input type="text" id="chatBox" placeholder="Ingresa un mensaje" class="form-control">
+        <button class="btn btn-secondary w-20" id="bottonChat">Enviar</button>
+        <p class="bg-light rounded w-100 p-3 flex-fill border rounded mb-2 overflow-y-scroll" style="max-height: 70dvh;"
+            id="parrafoMensajes"></p>
+    </div>
 </div>

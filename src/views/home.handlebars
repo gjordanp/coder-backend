@@ -1,14 +1,29 @@
 {{!-- <div>
-<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/chat/'">Chat</button>
-<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
-<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
-<button class="btn btn-light" onclick="window.location.href='http://localhost:8080/api/products/realtimeproducts'">Realtimeproducts</button>
+    <button class="btn btn-light" onclick="window.location.href='http://localhost:8080/chat/'">Chat</button>
+    <button class="btn btn-light"
+        onclick="window.location.href='http://localhost:8080/api/carts/646edc7fe82ae1241a0fe150'">Carrito</button>
+    <button class="btn btn-light"
+        onclick="window.location.href='http://localhost:8080/api/products/'">Productos</button>
+    <button class="btn btn-light"
+        onclick="window.location.href='http://localhost:8080/api/products/realtimeproducts'">Realtimeproducts</button>
 </div> --}}
+<div class="d-flex flex-column" style="height: 100dvh;">
+    {{>navbar user=user}}
+    <div class="container mt-4 mb-5 d-flex flex-column align-content-center justify-content-center flex-fill gap-5">
+        {{!-- <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary"
+                onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+            <button class="btn btn-outline-primary" onclick="window.location.href='/chat/'">Chat</button>
+            <button class="btn btn-outline-primary"
+                onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
+            <button class="btn btn-outline-primary" onclick="window.location.href='/api/products/'">Productos</button>
+            <button class="btn btn-outline-primary"
+                onclick="window.location.href='/api/products/realtimeproducts'">Realtimeproducts</button>
+        </div> --}}
 
-<div>
-    <button onclick="window.location.href='/api/sessions/profile'">Perfil</button>
-    <button onclick="window.location.href='/chat/'">Chat</button>
-    <button onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
-    <button onclick="window.location.href='/api/products/'">Productos</button>
-    <button onclick="window.location.href='/api/products/realtimeproducts'">Realtimeproducts</button>
+            <h1 class="align-self-center">Bienvenido a FLYKITE</h1>
+            <img class="align-self-center" src="img/flykite-logo-bl.svg" alt="" style="width: 300px; height: 300px">
+
+
+    </div>
 </div>

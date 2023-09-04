@@ -18,5 +18,5 @@ export const getChat = (req, res) => {
             io.emit('server:onLoadMessages', messages)//envio todos los mensajes a todos los clientes
         });
     }) 
-    res.render('chat')
+    res.render('chat', {user: req.session.user} )
 };

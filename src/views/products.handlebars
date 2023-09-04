@@ -1,5 +1,6 @@
+{{>navbar user=user}}
 <div class="container">
-    <div class="mt-4 p-2 gap-0 lh-1">
+    {{!-- <div class="mt-4 p-2 gap-0 lh-1">
         <h1>Bienvenido {{user.first_name}}</h1>
         <p>Apellido: {{user.last_name}}</p>
         <p>Email: {{user.email}}</p>
@@ -9,13 +10,13 @@
         <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/logout'">Cerrar
             Session</button>
     </div>
-    <br />
+    <br /> --}}
     <div class="p-2">
         <h2>Productos</h2>
-        <h3>Status: {{pagProducts.status}}</h3>
+        {{!-- <h3>Status: {{pagProducts.status}}</h3>
         <button class="btn btn-outline-primary"
             onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
-        <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+        <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button> --}}
     </div>
     <ul class="pagination justify-content-center mt-3">
         {{#if pagProducts.hasPrevPage}}

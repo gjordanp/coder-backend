@@ -35,7 +35,7 @@ export const getCartById = async (req, res) => {
     const cid = req.params.cid
     try {
         const cart = await cartService.findByIdAndPopulate(cid, 'products.id_prod');
-        res.status(200).render('carts', { cart: cart });
+        res.status(200).render('carts', { cart: cart, user: req.session.user });
     } catch (error) {
         req.logger.error("Error en getCartById");
         res.status(500).send("ERROR: " + error);

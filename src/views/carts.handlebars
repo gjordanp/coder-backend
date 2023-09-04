@@ -1,8 +1,10 @@
+{{>navbar user=user}}
 <div class="container mt-4 mb-5">
     <h2>Carrito</h2>
     <h3>Cart ID: {{cart._id}}</h3>
-    <button class="btn btn-outline-primary" onclick="window.location.href='/api/products/'">Productos</button>
-    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button>
+    <button class="btn btn-outline-primary" onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
+    {{!-- <button class="btn btn-outline-primary" onclick="window.location.href='/api/products/'">Productos</button>
+    <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button> --}}
     <br />
     <br />
     <ul id="docs" class="d-flex flex-column gap-3 p-0">

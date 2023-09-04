@@ -21,6 +21,7 @@ import errorHandler from './middlewares/errors.js';
 import { addLogger } from './utils/logger.js';
 
 import { serveSwagger, setupSwagger } from './utils/swagger.js';
+import e from 'express';
 
 
 //Configuraciones de Express
@@ -39,7 +40,16 @@ const port = process.env.PORT;
 
 
 //Configuracion de Handlebars
-app.engine('handlebars', engine());//Voy a trabajar con handlebars
+app.engine('handlebars', engine(
+  //helper for slice string
+  {
+    helpers: {
+      first: function (string) {
+        return string.slice(0, 1);
+      }
+    }
+  }
+));//Voy a trabajar con handlebars
 app.set('view engine', 'handlebars');//Mis vistas son de tipo handlebars
 app.set('views', path.resolve(__dirname, "./views"));//src/views
 

@@ -1,9 +1,40 @@
-<nav class="navbar border-bottom fixed-top" data-bs-theme="light">
-    <div class="container-md">
-        <a class="navbar-brand" href="/api/sessions">Registro</a>
-        <a class="navbar-brand" href="/">Login</a>
-        <a class="navbar-brand" href="/api/sessions/profile">Perfil</a>
-        <a class="navbar-brand" href="/api/products">Productos</a>
-        <a class="navbar-brand" href="/api/carts/646edc7fe82ae1241a0fe150">Carrito</a>
+
+<nav class="navbar navbar-expand-sm bg-dark" data-bs-theme="dark">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+    <img src="img/flykite-logo.png" alt="" style="width: 30px; height: 30px">
+    Flykite
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item align-self-center">
+          <a class="nav-link" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" aria-current="page" href="/chat">Chat</a>
+        </li>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="/api/products">Productos</a>
+        </li>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="/api/products/realtimeproducts">Realtimeproducts</a>
+        </li>
+        <li class="nav-item align-self-center">
+          <a class="nav-link" href="/api/carts/{{user.cart.id_cart}}">Carrito</a>
+        </li>
+        <li class="nav-item align-self-center dropdown">
+          <a class="nav-link " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="rounded-circle btn btn-outline-light p-0 border-2 fw-semibold" style="width: 35px; height: 35px">{{{first user.first_name}}}{{{first user.last_name}}}</button>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/api/sessions/profile">Perfil</a></li>
+            <li><a class="dropdown-item" href="/api/sessions/logout">Cerrar Session</a></li>
+          </ul>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
