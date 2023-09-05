@@ -98,3 +98,30 @@ export const changePremiumRole = async (req, res) => {
         res.status(500).json({status:'error', payload: error});
     }
 }
+
+export const updateLastConnection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await userService.updateLastConnection(id);
+        res.status(200).json({status:'success', payload: user});
+    } catch (error) {
+        req.logger.error("Error en updateLastConnection");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const upload = async (req, res, docName) => {
+    try {
+        if(!req.file) {
+            req.logger.error("Error en upload");
+            return res.status(500).json({status:'error', payload: "Error en upload"});
+        }
+        // console.log(req.file);
+        const response = await userService.uploadDocument(req.params.id, req.file, docName);
+        res.status(200).json({status:'success', payload: req.file});
+    } catch (error) {
+        req.logger.error("Error en upload");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+

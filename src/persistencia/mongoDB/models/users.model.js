@@ -43,6 +43,20 @@ const userSchema = new Schema({
     ,
     default: null,
   },
+  documents:{
+    type: [
+      {
+        _id: false,
+        name: String,
+        reference: String
+      }
+    ]
+    
+  },
+  last_connection: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const userModel = model("users", userSchema);
