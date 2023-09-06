@@ -82,7 +82,7 @@ class UserService {
             const options = { new: true };
             const updatedUser = await usersMongo.findOneAndUpdate(filter, update, options);
             return updatedUser;
-            
+
         } catch (error) {
             return error;
         }
@@ -107,6 +107,23 @@ class UserService {
     async changePremiumRole(id) {
         try {
             return await usersMongo.changePremiumRole(id);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async updateLastConnection(id) {
+        try {
+            return await usersMongo.updateLastConnection(id);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async uploadDocument(id, file, docName) {
+        try {
+            const filepath = file.path.split("public")[1];
+            return await usersMongo.uploadDocument(id, docName, filepath);
         } catch (error) {
             return error;
         }

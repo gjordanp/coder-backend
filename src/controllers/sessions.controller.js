@@ -29,7 +29,11 @@ export const failregister = async (req, res) => {
 }
 
 export const logout = async (req, res) => {
+    if (!req.session) {
+        return res.redirect('/');
+    }
     req.session.destroy();
+    const response = await userService.updateLastConnection(req.user._id); //Actualizamos la ultima conexion
     res.redirect('/');
 }
 
@@ -52,13 +56,16 @@ export const tryLogin = async (req, res) => {
             return res.status(400).render('errors', req.message);
         }
         req.session.user = {
+            _id: req.user._id,
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             age: req.user.age,
             email: req.user.email,
             role: req.user.role,
-            cart: req.user.cart
+            cart: req.user.cart,
+            documents: req.user.documents
         }
+        const response = await userService.updateLastConnection(req.user._id);//Actualizamos la ultima conexion
         //redirenccionar usando 303 cambia el metodo a get, en este caso de post a get
         //https://stackoverflow.com/questions/33214717/why-post-redirects-to-get-and-put-redirects-to-put
         res.status(200).redirect(303,'/api/products');

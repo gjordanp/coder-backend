@@ -13,7 +13,6 @@ import homeRouter from './routes/home.routes.js';
 import sessionRouter from './routes/sessions.routes.js';
 import userRouter from './routes/user.routes.js';
 import { __dirname } from './utils/path.js';
-//import multer from 'multer';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
 import compression from 'express-compression';
@@ -23,23 +22,28 @@ import { addLogger } from './utils/logger.js';
 import { serveSwagger, setupSwagger } from './utils/swagger.js';
 
 
+
 //Configuraciones de Express
 export const app = express();
 const port = process.env.PORT;
 
-// //Configuracion de Multer
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb)=>{
-//         cb(null, 'src/public/img')
-//     },
-//     filename: (req, file, cb)=>{
-//         cb(null, file.originalname)
-//     }
-// })
-
 
 //Configuracion de Handlebars
-app.engine('handlebars', engine());//Voy a trabajar con handlebars
+app.engine('handlebars', engine(
+  //helper for slice string
+  {
+    helpers: {
+      first: function (string) {
+        return string.slice(0, 1);
+      },
+      findProfileImg: function (documents) {
+        const docs=documents;
+        const doc=docs.find(doc => doc.name == "profileImg")
+        return doc.reference;
+      }
+    }
+  }
+));//Voy a trabajar con handlebars
 app.set('view engine', 'handlebars');//Mis vistas son de tipo handlebars
 app.set('views', path.resolve(__dirname, "./views"));//src/views
 
@@ -63,12 +67,6 @@ app.use(passport.session());
 app.use(compression({brotli:{enabled: true, zlib: {}},}));//Comprimir response con Brotli
 app.use(addLogger);//Agrego logger a request
 
-//const upload = multer({storage: storage})//metodo de multer para subir archivos
-
-// //Conexion a MongoDB Atlas
-// mongoose.connect(process.env.URL_MONGODB_ATLAS)
-// .then(() => console.log('Conectado a MongoDB Atlas'))
-// .catch(error => console.log(error));
 
 //Escuchar Servidor
 const httpserver = app.listen(port, () => {
@@ -83,12 +81,13 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 });
 
 
-
 //Routes
+app.use('/api/sessions/profile', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/products', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/carts', express.static(__dirname + '/public'))
 app.use('/chat', express.static(__dirname + '/public'))
 app.use('/', express.static(__dirname + '/public'))
+
 
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);

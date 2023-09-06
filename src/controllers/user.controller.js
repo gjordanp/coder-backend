@@ -91,10 +91,47 @@ const setPasswordNotModifiable = async (user) => {
 export const changePremiumRole = async (req, res) => {
     try {
         const id = req.params.id;
-        const user = await userService.changePremiumRole(id);
-        res.status(200).json({status:'success', payload: user});
+        const user = await userService.findById(id);
+        const containIdDoc = user.documents.find(doc => doc.name === "idDoc");
+        const containAddressDoc = user.documents.find(doc => doc.name === "addressDoc");
+        const containAccountDoc = user.documents.find(doc => doc.name === "accountDoc");
+        if (user.role=="user" && (!containIdDoc || !containAddressDoc || !containAccountDoc)) {
+            req.logger.error("Usuario no ha subido todos los documentos");
+            return res.status(400).send({ status: "error", message: "Usuario no ha subido todos los documentos" });
+        }
+        const updatedUser = await userService.changePremiumRole(id);
+        res.status(200).json({status:'success', payload: updatedUser});
     } catch (error) {
         req.logger.error("Error en changePremiumRole");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const updateLastConnection = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await userService.updateLastConnection(id);
+        res.status(200).json({status:'success', payload: user});
+    } catch (error) {
+        req.logger.error("Error en updateLastConnection");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const uploadToMongo = async (req, res) => {
+    try {
+        if(!req.file) {
+            req.logger.error("Error en upload");
+            return res.status(500).json({status:'error', payload: "Error en upload"});
+        }
+        const body = req.body;//multipart/form-data entrega body vacio, por lo que se agrega un input de texto adicional con el nombre del documento
+        const docName=Object.values(body)[0];
+        const response = await userService.uploadDocument(req.params.id, req.file, docName);
+        const user = await userService.findById(req.params.id);
+        req.session.user=user;
+        res.status(200).json({status:'success', payload: req.file});
+    } catch (error) {
+        req.logger.error("Error en upload");
         res.status(500).json({status:'error', payload: error});
     }
 }

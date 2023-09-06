@@ -43,6 +43,20 @@ const userSchema = new Schema({
     ,
     default: null,
   },
+  documents:{
+    type: [
+      {
+        _id: false,
+        name: String,
+        reference: String
+      }
+    ],
+    default: [{name: "profileImg", reference: "https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"}]
+  },
+  last_connection: {
+    type: Date,
+    default: Date.now,
+  }
 });
 
 const userModel = model("users", userSchema);

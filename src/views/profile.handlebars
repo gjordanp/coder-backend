@@ -1,3 +1,4 @@
+{{>navbar user=user}}
 <section style="background-color: #eee; height: 100vh">
   <div class="container py-5">
     <div class="row">
@@ -16,14 +17,15 @@
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-body text-center">
-            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+            <img src="{{findProfileImg user.documents}}" alt="avatar"
               class="rounded-circle img-fluid" style="width: 150px;">
             <h5 class="my-3">{{user.first_name}} {{user.last_name}}</h5>
             <p class="text-muted mb-1">Full Stack Developer</p>
             <p class="text-muted mb-4">Chile</p>
             <div class="d-flex justify-content-center mb-2">
               <button type="button" class="btn btn-primary">Follow</button>
-              <button type="button" class="btn btn-outline-primary ms-1" onclick="window.location.href='/chat'">Message</button>
+              <button type="button" class="btn btn-outline-primary ms-1"
+                onclick="window.location.href='/chat'">Message</button>
             </div>
           </div>
         </div>
@@ -84,8 +86,89 @@
                 <p class="mb-0">Enlaces</p>
               </div>
               <div class="col-sm-9">
-                <button type="button" class="btn btn-outline-primary btn-sm mb-1" onclick="window.location.href='/api/products/'">Productos</button>
-                <button type="button" class="btn btn-outline-primary btn-sm mb-1" onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
+                <button type="button" class="btn btn-outline-primary btn-sm mb-1"
+                  onclick="window.location.href='/api/products/'">Productos</button>
+                <button type="button" class="btn btn-outline-primary btn-sm mb-1"
+                  onclick="window.location.href='/api/carts/{{user.cart.id_cart}}'">Carrito</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <form method="post" action="/api/users/{{user._id}}/documents" enctype="multipart/form-data">
+                  <div class="row align-items-center">
+                    <div class="col-3">
+                      <p class="mb-0">Imagen de perfil</p>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" name="filetype" value="profileImg" class="d-none">
+                      <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="col-2">
+                      <input type="submit" value="Cargar" class="btn btn-primary">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="row my-3">
+              <div class="col">
+                <form method="post" action="/api/users/{{user._id}}/documents" enctype="multipart/form-data">
+                  <div class="row align-items-center">
+                    <div class="col-3">
+                      <p class="mb-0">Documento de identificacion</p>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" name="filetype" value="idDoc" class="d-none">
+                      <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="col-2">
+                      <input type="submit" value="Cargar" class="btn btn-primary">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="row my-3">
+              <div class="col">
+                <form method="post" action="/api/users/{{user._id}}/documents" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-3">
+                      <p class="mb-0">Comprobante de domicilio</p>
+                    </div>
+                    <div class="col-7">
+                      <input type="text" name="filetype" value="addressDoc" class="d-none">
+                      <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="col-2">
+                      <input type="submit" value="Cargar" class="btn btn-primary">
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <hr>
+            <div class="row mt-3">
+              <div class="col">
+                <form method="post" action="/api/users/{{user._id}}/documents" enctype="multipart/form-data">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Comprobante de estado de cuenta</p>
+                    </div>
+                    <div class="col-sm-7">
+                      <input type="text" name="filetype" value="accountDoc" class="d-none">
+                      <input type="file" name="file" class="form-control">
+                    </div>
+                    <div class="col-sm-2">
+                      <input type="submit" value="Cargar" class="btn btn-primary">
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
