@@ -47,12 +47,21 @@ class UsersMongo extends BasicMongo {
     async uploadDocument(id, docName, filePath) {
         try {
             // push document to user.documents
-            const update = {
-                $push: { documents: { name: docName, reference: filePath } },
-            };
-            const updatedUser = await userModel.findByIdAndUpdate(id, update, {
-                new: true,
-            });
+            const user = await userModel.findById(id);
+            if (!user) {
+                return { error: "User not found" };
+            }
+            const doc = user.documents.find((doc) => doc.name === docName);
+
+            if (!doc) {// if document not found, push it
+                const update = {$push: { documents: { name: docName, reference: filePath }}};
+                const updatedUser = await userModel.findByIdAndUpdate(id, update, {new: true});
+            }
+            else {// if document found, update it
+                const update = {$set: { documents: { name: docName, reference: filePath }}};
+                const updatedUser = await userModel.findByIdAndUpdate(id, update, {new: true});
+            }
+
         } catch (error) {
             return error;
         }
