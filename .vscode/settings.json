@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "undefined/subscriptions/ae6cb0b5-2e3e-496c-bf79-7399381ca125/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/flykite2",
+    "appService.deploySubpath": "."
+}
