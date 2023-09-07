@@ -82,6 +82,7 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 
 
 //Routes
+app.use('/api/products/realtimeproducts', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/sessions/profile', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/products', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/carts', express.static(__dirname + '/public'))

@@ -1,25 +1,27 @@
-{{>navbar}}
-<form action="" id="formulario">
-  <label class="product-label" for="title">Titulo:</label><br>
-  <input class="product-input" type="text" id="title" name="title" placeholder="Producto" ><br>
-  <label class="product-label" for="description">Descripcion:</label><br>
-  <input class="product-input" type="text" id="description" name="description" placeholder="Descripcion del producto"><br>
-  <label class="product-label" for="thumbnails">Thumbnails:</label><br>
-  <input class="product-input" type="text" id="thumbnails" name="thumbnails" placeholder="[URL1, URL2, URL3]"><br>
-  <label class="product-label" for="price">Precio:</label><br>
-  <input class="product-input" type="text" id="price" name="price" placeholder="2000"><br>
-  <label class="product-label" for="code">Code:</label><br>
-  <input class="product-input" type="text" id="code" name="code" placeholder="abc123"><br>
-  <label class="product-label" for="stock">Stock:</label><br>
-  <input class="product-input" type="text" id="stock" name="stock" placeholder="35"><br>
-  <label class="product-label" for="status">Status:</label><br>
-  <input class="product-input" type="text" id="status" name="status" placeholder="true"><br>
-  <label class="product-label" for="category">Categoria:</label><br>
-  <input class="product-input" type="text" id="category" name="category" placeholder="categoria"><br>
-  <br>
-  <input class="product-input" type="submit" value="Agregar Producto">
-</form>
-
-
-<ul id="product-list">
-</ul>
+{{>navbar user=user}}
+<div class="container d-flex flex-column align-items-center">
+  <form action="" id="formulario" class="w-75 card p-3 my-3 bg-light">
+    <label class="product-label form-label" for="title">Titulo:</label>
+    <input class="product-input form-control mb-2" type="text" id="title" name="title" placeholder="Producto">
+    <label class="product-label form-label" for="description">Descripcion:</label>
+    <input class="product-input form-control mb-2" type="text" id="description" name="description"
+      placeholder="Descripcion del producto">
+    <label class="product-label form-label" for="thumbnails">Thumbnails:</label>
+    <input class="product-input form-control mb-2" type="text" id="thumbnails" name="thumbnails"
+      placeholder="[URL1, URL2, URL3]">
+    <label class="product-label form-label" for="price">Precio:</label>
+    <input class="product-input form-control mb-2" type="text" id="price" name="price" placeholder="2000">
+    <label class="product-label form-label" for="code">Code:</label>
+    <input class="product-input form-control mb-2" type="text" id="code" name="code" placeholder="abc123">
+    <label class="product-label form-label" for="stock">Stock:</label>
+    <input class="product-input form-control mb-2" type="text" id="stock" name="stock" placeholder="35">
+    <label class="product-label form-label" for="status">Status:</label>
+    <input class="product-input form-control mb-2" type="text" id="status" name="status" placeholder="true">
+    <label class="product-label form-label" for="category">Categoria:</label>
+    <input class="product-input form-control mb-2" type="text" id="category" name="category" placeholder="categoria">
+    <br>
+    <input class="product-input form-control mb-2 btn btn-secondary" type="submit" value="Agregar Producto">
+  </form>
+  <ul id="product-list" class="container d-flex flex-column justify-content-center align-items-center m-0 p-0 gap-2">
+  </ul>
+</div>

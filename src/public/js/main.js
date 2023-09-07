@@ -22,8 +22,9 @@ LoadProducts=(products)=>{
     productlist.innerHTML='';
     products.forEach(product => {
         const productli=document.createElement('li');
-        Object.entries(product).forEach(([key, value])=>{productli.innerHTML+=`<p><strong>${key}:</strong> ${value}</p>`})
-        productli.innerHTML+=`<button class="delete" data-id="${product._id}">Borrar</button>`
+        productli.classList.add('card', 'p-3','w-100');
+        Object.entries(product).forEach(([key, value])=>{productli.innerHTML+=`<p class="text-wrap"><strong>${key}:</strong> ${value}</p>`})
+        productli.innerHTML+=`<button class="delete btn btn-primary" data-id="${product._id}">Borrar</button>`
         productli.innerHTML+=`<br>`
         productlist?.appendChild(productli);
 

@@ -208,7 +208,7 @@ export const realTimeProducts = async (req, res) => {
   try {
     const products = await productService.findAll(); //obtenemos los productos
     //const products = await productModel.paginate({}, { limit: 10, page: 1, sort: { price: 1 }, lean: true})
-    res.status(200).render("realtimeproducts", { products: products });
+    res.status(200).render("realtimeproducts", { products: products, user: req.session.user });
   } catch (error) {
     req.logger.error("Error en realTimeProducts");
     res.status(500).send("ERROR: " + error);
