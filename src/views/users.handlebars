@@ -1,0 +1,23 @@
+{{>navbar user=user}}
+<div class="container mt-4 mb-5">
+    <div class="d-flex flex-column gap-3 p-0">
+        {{#each users}}
+        <div class="card">
+            <div class="card-body">
+                <p>Nombre: {{this._doc.first_name}}</p>
+                <p>Apellido: {{this._doc.last_name}}</p>
+                <p>Email: {{this._doc.email}}</p>
+                <p>Rol: {{this._doc.role}}</p>
+                {{#if (neq this._doc.role "admin")}}
+                    <form  method="get" action="/api/users/premium/{{this._doc._id}}">
+                        <input type="submit" class="btn btn-outline-primary mb-2" value="Cambiar rol"/> 
+                    </form>
+                    <form  method="get" action="/api/users/delete/{{this._doc._id}}">
+                        <input type="submit" class="btn btn-outline-primary" value="Borrar"/> 
+                    </form>
+                {{/if}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</div>

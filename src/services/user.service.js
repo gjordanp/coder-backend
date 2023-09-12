@@ -1,6 +1,7 @@
 import { usersMongo } from '../persistencia/DAOs/mongoDao/usersMongo.js';
 import { createHash, validatePassword } from '../utils/bcript.js';
 import { generateUser } from '../utils/faker.js';
+import  sendMail  from '../utils/nodemailer.js';
 
 
 class UserService {
@@ -124,6 +125,32 @@ class UserService {
         try {
             const filepath = file.path.split("public")[1];
             return await usersMongo.uploadDocument(id, docName, filepath);
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async deleteUsers() {
+        try {
+            const users = await usersMongo.findAll();
+            //date time = 2 days
+            const twoDays= 60*60*24*1000*2;//2 days in milliseconds
+            //const twoDays= 1;//1 milliseconds
+            const oldUsers = users.filter(user => user.last_connection < Date.now() - twoDays && user.role != "admin");//find old users and not admin
+            oldUsers.forEach(async (user) => {
+                await usersMongo.delete(user._id);//delete old users
+                await sendMail(user.email, "Flykite - Cuenta eliminada", "Su cuenta ha sido eliminada por inactividad", "<h1>Su cuenta ha sido eliminada por inactividad</h1>", null);//send email to old users
+            });
+            const newUsers = await usersMongo.findAll();//find new users
+            return newUsers;
+        } catch (error) {
+            return error;
+        }
+    }
+
+    async deleteUser(id) {
+        try {
+            return await usersMongo.delete(id);
         } catch (error) {
             return error;
         }

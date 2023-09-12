@@ -1,25 +1,42 @@
-import { Router } from 'express';
-import { getMockUsers, getUserById, getUsers, resetPassword, resetPasswordNewPass, setPasswordModifiable, changePremiumRole, uploadToMongo } from '../controllers/user.controller.js';
-import { multerUploader } from '../utils/multer.js';
-
+import { Router } from "express";
+import {
+  getMockUsers,
+  getUserById,
+  getUsers,
+  resetPassword,
+  resetPasswordNewPass,
+  setPasswordModifiable,
+  changePremiumRole,
+  uploadToMongo,
+  deleteUsers,
+  editUsers,
+  deleteUser
+} from "../controllers/user.controller.js";
+import { multerUploader } from "../utils/multer.js";
+import authz from "../middlewares/autorization.js";
 
 const userRouter = Router();
 
-userRouter.get('/', getUsers);
+userRouter.get("/", getUsers);
 
-userRouter.get('/mockusers', getMockUsers);
+userRouter.get("/edit", authz("admin"), editUsers);
 
-userRouter.get('/:id', getUserById);
+userRouter.get("/mockusers", getMockUsers);
 
-userRouter.get('/:id/resetpasswordnewpass', resetPasswordNewPass)
+userRouter.get("/:id", getUserById);
 
-userRouter.post('/:id/resetpassword', resetPassword)
+userRouter.get("/:id/resetpasswordnewpass", resetPasswordNewPass);
 
-userRouter.get('/:id/setpasswordmodifiable', setPasswordModifiable)
+userRouter.post("/:id/resetpassword", resetPassword);
 
-userRouter.get('/premium/:id', changePremiumRole)
+userRouter.get("/:id/setpasswordmodifiable", setPasswordModifiable);
 
-userRouter.post('/:id/documents',multerUploader.single('file'), uploadToMongo);
+userRouter.get("/premium/:id", changePremiumRole);
 
+userRouter.post("/:id/documents", multerUploader.single("file"), uploadToMongo);
+
+userRouter.delete("/", deleteUsers);
+
+userRouter.get("/delete/:id", authz("admin"), deleteUser);
 
 export default userRouter;

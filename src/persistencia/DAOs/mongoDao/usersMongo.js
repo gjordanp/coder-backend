@@ -66,5 +66,7 @@ class UsersMongo extends BasicMongo {
             return error;
         }
     }
+
+    
 }
 export const usersMongo = new UsersMongo(userModel);

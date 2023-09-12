@@ -1,3 +1,4 @@
+import e from "express";
 import userService from "../services/user.service.js";
 import sendMail from "../utils/nodemailer.js"
 
@@ -132,6 +133,41 @@ export const uploadToMongo = async (req, res) => {
         res.status(200).json({status:'success', payload: req.file});
     } catch (error) {
         req.logger.error("Error en upload");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await userService.deleteUser(id);
+        res.status(200).json({status:'success', payload: user});
+    } catch (error) {
+        req.logger.error("Error en deleteUser");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const deleteUsers = async (req, res) => {
+    try {
+        const users = await userService.deleteUsers();
+        res.status(200).json({status:'success', payload: users});
+    } catch (error) {
+        req.logger.error("Error en deleteUsers");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
+export const editUsers = async (req, res) => {
+    try {
+        if(!req.session.user) {
+            req.logger.error("user not logged");
+            return res.status(500).json({status:'error', payload: "user not logged"});
+        }
+        const users = await userService.findAll();
+        res.status(200).render('users', {user:req.session.user, users:users});
+    } catch (error) {
+        req.logger.error("Error en editUsers");
         res.status(500).json({status:'error', payload: error});
     }
 }

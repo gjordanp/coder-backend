@@ -40,6 +40,12 @@ app.engine('handlebars', engine(
         const docs=documents;
         const doc=docs.find(doc => doc.name == "profileImg")
         return doc.reference;
+      },
+      eq: function (v1, v2) {
+        return v1 === v2;
+      },
+      neq: function (v1, v2) {
+        return v1 !== v2;
       }
     }
   }
@@ -82,12 +88,14 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 
 
 //Routes
-app.use('/api/products/realtimeproducts', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
-app.use('/api/sessions/profile', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
-app.use('/api/products', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
-app.use('/api/carts', express.static(__dirname + '/public'))
-app.use('/chat', express.static(__dirname + '/public'))
+app.use('/api/users/edit/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
+app.use('/api/products/realtimeproducts/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
+app.use('/api/sessions/profile/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
+app.use('/api/products/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
+app.use('/api/carts/', express.static(__dirname + '/public'))
+app.use('/chat/', express.static(__dirname + '/public'))
 app.use('/', express.static(__dirname + '/public'))
+
 
 
 app.use('/api/products', productRouter);
