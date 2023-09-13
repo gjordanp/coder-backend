@@ -12,6 +12,7 @@ import chatRouter from './routes/chat.routes.js';
 import homeRouter from './routes/home.routes.js';
 import sessionRouter from './routes/sessions.routes.js';
 import userRouter from './routes/user.routes.js';
+import paymentRouter from './routes/payment.routes.js';
 import { __dirname } from './utils/path.js';
 import { engine } from 'express-handlebars';
 import * as path from 'path';
@@ -46,6 +47,13 @@ app.engine('handlebars', engine(
       },
       neq: function (v1, v2) {
         return v1 !== v2;
+      },
+      cartTotal: function (cart) {
+        let total = 0;
+        cart.products.forEach(element => {
+          total += element.id_prod.price * element.quantity;
+        });
+        return total;
       }
     }
   }
@@ -88,6 +96,7 @@ app.use((req, res, next) => {//Uso de Socket.io en rutas
 
 
 //Routes
+app.use('/api/payments/success/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/users/edit/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/products/realtimeproducts/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
 app.use('/api/sessions/profile/', express.static(__dirname + '/public')) //usar carpeta public en ruta /api/products
@@ -97,7 +106,7 @@ app.use('/chat/', express.static(__dirname + '/public'))
 app.use('/', express.static(__dirname + '/public'))
 
 
-
+app.use('/api/payments', paymentRouter);
 app.use('/api/products', productRouter);
 app.use('/api/carts', cartRouter);
 app.use('/api/users', userRouter);

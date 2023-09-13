@@ -1,6 +1,6 @@
 import { Router } from 'express';
 //import { CartManager } from '../CartManager.js';
-import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductsOnCart, updateProductQuantityOnCart, purchaseCart} from '../controllers/cart.controller.js';
+import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductsOnCart, updateProductQuantityOnCart, purchaseCart, checkout} from '../controllers/cart.controller.js';
 import authz from '../middlewares/autorization.js';
 import auth from '../middlewares/authentication.js';
 
@@ -41,6 +41,8 @@ cartRouter.post("/:cid/product/:pid", auth(), authz('user','premium'), addProduc
 cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart)
 
 cartRouter.delete("/:cid/product/:pid", auth(), deleteProductOnCart);
+
+cartRouter.get("/checkout", checkout);
 
 
 

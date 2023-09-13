@@ -2,11 +2,8 @@
 <div class="container mt-4 mb-5">
     <h2>Carrito</h2>
     <h3>Cart ID: {{cart._id}}</h3>
-    <button class="btn btn-outline-primary" onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
     {{!-- <button class="btn btn-outline-primary" onclick="window.location.href='/api/products/'">Productos</button>
     <button class="btn btn-outline-primary" onclick="window.location.href='/api/sessions/profile'">Perfil</button> --}}
-    <br />
-    <br />
     <ul id="docs" class="d-flex flex-column gap-3 p-0">
         {{#each cart.products}}
         <ul class="card p-3 list-unstyled gap-1 d-flex flex-row flex-wrap">
@@ -36,7 +33,14 @@
         </ul>
         {{/each}}
     </ul>
-    <br />
-    <button class="btn btn-outline-primary"
-        onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
+    <div class="d-flex flex-row gap-3 justify-content-end">
+        <h3>Total: ${{cartTotal cart}}</h3>
+        <button class="btn btn-outline-primary" onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
+        <form action="/api/payments/checkout-session" method="post">
+            <input class="btn btn-outline-primary p-2" type="submit" value="Checkout">
+            <input type="hidden" name="amount" value="{{cartTotal cart}}">
+            <input type="hidden" name="currency" value="usd">
+        </form>
+    </div>
 </div>
+<script src="https://js.stripe.com/v3/"></script>

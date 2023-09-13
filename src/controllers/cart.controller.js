@@ -245,8 +245,18 @@ export const purchaseCart = async (req, res) => {
     }
 }
 
+export const checkout = async (req, res) => {
+    try {
+        res.render('checkout', { user: req.session.user });
+    } catch (error) {
+        req.logger.error("Error en checkout");
+        res.status(500).send("Error: \n\n" + error);
+    }
+}
+
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
         await callback(array[index], index, array);
     }
 }
+
