@@ -101,7 +101,7 @@ postButtons.forEach(postButton=>{postButton.addEventListener('click', (e)=>{
     if(e.target.dataset.id===postButton.dataset.id) {
         const cid=document.getElementById('cartId').innerText.split(' ')[2]
         //console.log(cid);
-        addToCart(postButton.dataset.id,cid).then(()=>window.location.href = `http://localhost:8080/api/carts/${cid}`);
+        addToCart(postButton.dataset.id,cid).then(()=>window.location.href = `/api/carts/${cid}`);
     }
 })})
 
@@ -139,7 +139,7 @@ const deleteFromCart= async (pid)=>{
 const cid=window.location.href.split("/").pop();
 //console.log(cid);
     try {
-        const response= await fetch(`http://localhost:8080/api/carts/${cid}/product/${pid}`,{
+        const response= await fetch(`/api/carts/${cid}/product/${pid}`,{
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
