@@ -1,9 +1,20 @@
-import { Router } from 'express';
+import { Router } from "express";
 //import { CartManager } from '../CartManager.js';
-import { addProductOnCart, createCart, deleteCart, deleteProductOnCart, getCartById, getCarts, updateProductsOnCart, updateProductQuantityOnCart, purchaseCart, checkout} from '../controllers/cart.controller.js';
-import authz from '../middlewares/autorization.js';
-import auth from '../middlewares/authentication.js';
-
+import {
+    addProductOnCart,
+    createCart,
+    deleteCart,
+    deleteProductOnCart,
+    getCartById,
+    getCarts,
+    updateProductsOnCart,
+    updateProductQuantityOnCart,
+    purchaseCart,
+    checkout,
+    checkoutSession,
+} from "../controllers/cart.controller.js";
+import authz from "../middlewares/autorization.js";
+import auth from "../middlewares/authentication.js";
 
 const cartRouter = Router(); //Router para manejo de rutas
 
@@ -22,33 +33,26 @@ const cartRouter = Router(); //Router para manejo de rutas
 //     res.send(await cartManager.addProduct(cid,pid,quantity))
 // })
 
-
 //MONGO -------------------------------------------------------------------------------------------
-cartRouter.get('/createcart', createCart);
+cartRouter.get("/createcart", createCart);
 
-cartRouter.get('/', getCarts);
+cartRouter.get("/", getCarts);
 
-cartRouter.get('/:cid', getCartById);
+cartRouter.get("/:cid", getCartById);
 
 cartRouter.put("/:cid", auth(), updateProductsOnCart);
 
-cartRouter.delete("/:cid", auth(), authz('admin'), deleteCart);
+cartRouter.delete("/:cid", auth(), authz("admin"), deleteCart);
 
-cartRouter.get('/:cid/purchase', auth(), purchaseCart);
+cartRouter.get("/:cid/purchase", auth(), purchaseCart, checkoutSession);
 
-cartRouter.post("/:cid/product/:pid", auth(), authz('user','premium'), addProductOnCart);
+cartRouter.post("/:cid/product/:pid",auth(), authz("user", "premium"),addProductOnCart);
 
-cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart)
+cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart);
 
 cartRouter.delete("/:cid/product/:pid", auth(), deleteProductOnCart);
 
 cartRouter.get("/checkout", checkout);
-
-
-
-
-
-
 
 //Otras Rutas
 cartRouter.put("*", async (req, res) => {

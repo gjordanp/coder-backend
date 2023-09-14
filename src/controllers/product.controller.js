@@ -163,6 +163,9 @@ export const deleteProduct = async (req, res, next) => {
 };
 
 export const realTimeProducts = async (req, res) => {
+  if(!req.session.user){
+    res.redirect('/');
+  }
   const io = req.io;
 
   //Conexion a socket.io

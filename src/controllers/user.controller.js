@@ -101,6 +101,7 @@ export const changePremiumRole = async (req, res) => {
             return res.status(400).send({ status: "error", message: "Usuario no ha subido todos los documentos" });
         }
         const updatedUser = await userService.changePremiumRole(id);
+        //res.redirect('/api/users/edit');
         res.status(200).json({status:'success', payload: updatedUser});
     } catch (error) {
         req.logger.error("Error en changePremiumRole");
