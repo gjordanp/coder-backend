@@ -5,8 +5,9 @@ import supertest from "supertest"
 import {app} from "../src/app.js";
 
 const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
-export const request = supertest(domain);
+//const domain = enviroment === 'production' ? 'https://flykite.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
+export const request = supertest(app);
+//export const request = supertest('/');
 
 export let AdminCookie=null; //exportamos cookie de session de usuario admin para test de rutas con autenticacion
 before(async()=>{

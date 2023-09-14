@@ -10,7 +10,7 @@ import { options } from '../utils/commander.js';
 
 
 const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
+const domain = enviroment === 'production' ? 'https://flykite.onrender.com' : `http://localhost:${process.env.PORT}`;
 
 const initializePassport = () => {
     
@@ -63,7 +63,7 @@ const initializePassport = () => {
     passport.use('github',new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: 'http://localhost:8080/api/sessions/githubcallback'
+        callbackURL: `/api/sessions/githubcallback`
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             //console.log(profile);
@@ -92,7 +92,7 @@ const initializePassport = () => {
     passport.use('google',new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL:`${domain}/api/sessions/googlecallback`
+        callbackURL:`/api/sessions/googlecallback`
       },
       async (accessToken, refreshToken, profile, cb)=> {
         try {
