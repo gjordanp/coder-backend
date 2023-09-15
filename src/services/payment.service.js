@@ -4,7 +4,7 @@ import productService from './product.service.js';
 
 
 const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite.azurewebsites.net' : `http://localhost:${process.env.PORT}`;
+//const domain = enviroment === 'production' ? 'https://flykite.onrender.com' : `http://localhost:${process.env.PORT}`;
 
 
 export default class PaymentService{

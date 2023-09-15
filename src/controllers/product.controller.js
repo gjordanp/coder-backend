@@ -52,10 +52,10 @@ export const getProducts = async (req, res) => {
       const queryString = query != undefined ? `query=${query}&` : "";
 
       paginatedProducts.prevLink = paginatedProducts.hasPrevPage
-        ? `http://localhost:${port}/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.prevPage}`
+        ? `/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.prevPage}`
         : "";
       paginatedProducts.nextLink = paginatedProducts.hasNextPage
-        ? `http://localhost:${port}/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.nextPage}`
+        ? `/api/products?${limitString}${sortString}${queryString}page=${paginatedProducts.nextPage}`
         : "";
       paginatedProducts = {
         status: !(page <= 0 || page > paginatedProducts.totalPages)

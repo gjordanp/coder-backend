@@ -10,7 +10,7 @@ import { options } from '../utils/commander.js';
 
 
 const enviroment = options.mode
-const domain = enviroment === 'production' ? 'https://flykite.onrender.com' : `http://localhost:${process.env.PORT}`;
+//const domain = enviroment === 'production' ? 'https://flykite.onrender.com' : `http://localhost:${process.env.PORT}`;
 
 const initializePassport = () => {
     
@@ -63,7 +63,9 @@ const initializePassport = () => {
     passport.use('github',new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: `/api/sessions/githubcallback`
+        //callbackURL: `https://${req.get('host')}/api/sessions/githubcallback`
+        //callbackURL:"http://localhost:8080/api/sessions/githubcallback"
+        //Cambiamos el callback a sessionRouter, para hacerlo relativo al dominio
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             //console.log(profile);
@@ -92,7 +94,9 @@ const initializePassport = () => {
     passport.use('google',new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL:`/api/sessions/googlecallback`
+        //callbackURL:`http://${req.get('host')}/api/sessions/googlecallback`
+        //callbackURL:'http://localhost:8080/api/sessions/googlecallback'
+        //Cambiamos el callback a sessionRouter, para hacerlo relativo al dominio
       },
       async (accessToken, refreshToken, profile, cb)=> {
         try {

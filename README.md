@@ -6,5 +6,8 @@ Iniciar en ambiente de desarrollo:
 Iniciar en ambiente de produccion: 
 >npm run start
 
+Iniciar testing: 
+>npm run test
+
 ## DOCUMENTACION
 http://localhost:8080/apidocs/

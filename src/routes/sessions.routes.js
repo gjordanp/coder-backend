@@ -36,22 +36,23 @@ sessionRouter.get('/failregister', failregister);
 sessionRouter.post('/trylogin',passport.authenticate('login',{failureRedirect:'faillogin'}), tryLogin);
 sessionRouter.get('/faillogin', faillogin);
 
-// github
-sessionRouter.get('/google', passport.authenticate('google',{scope:['email','profile']}),async (req,res)=>{});
+//Github
+sessionRouter.get('/google', passport.authenticate('google',{scope:['email','profile'],callbackURL:'/api/sessions/googlecallback'
+}));
 sessionRouter.get('/googlecallback', 
-    passport.authenticate('google',{failureRedirect:'/faillogin'}),
-    async (req,res)=>{
+    passport.authenticate('google',{failureRedirect:'/faillogin',callbackURL:'/api/sessions/googlecallback'}),
+    (req,res)=>{
     req.session.user = req.user;
-    res.redirect('../products');
+    res.redirect('/api/products');
 });
 
 // Google
-sessionRouter.get('/github', passport.authenticate('github',{scope:['user:email']}),async (req,res)=>{});
+sessionRouter.get('/github', passport.authenticate('github',{scope:['user:email'],callbackURL:'/api/sessions/githubcallback'}),async (req,res)=>{});
 sessionRouter.get('/githubcallback', 
-    passport.authenticate('github',{failureRedirect:'/faillogin'}),
+    passport.authenticate('github',{failureRedirect:'/faillogin',callbackURL:'/api/sessions/githubcallback'}),
     async (req,res)=>{
     req.session.user = req.user;
-    res.redirect('../products');
+    res.redirect('/api/products');
 });
 
 //Current user

@@ -2,7 +2,7 @@
 import userService from '../services/user.service.js';
 import CurrentUserDTO from '../persistencia/DTOs/currentUserDTO.js';
 import sendMail from '../utils/nodemailer.js';
-import { setPasswordModifiable } from './user.controller.js';
+
 
 
 export const renderRegister = async (req, res) => {
@@ -105,7 +105,7 @@ export const resetPasswordEmail = async (req, res) => {
         const html=`
         <h1>Recuperar Contraseña</h1>
         <p>Para recuperar su contraseña ingrese al siguiente link</p>
-        <a href="http://localhost:8080/api/users/${user._id}/resetpasswordnewpass">Recuperar Contraseña</a>
+        <a href="http://${req.get('host')}/api/users/${user._id}/resetpasswordnewpass">Recuperar Contraseña</a>
         `;
         const sentEmail=await sendMail(req.body.email, "Recuperar Contraseña", "Recupere su contraseña de flykite", html, null); 
 
