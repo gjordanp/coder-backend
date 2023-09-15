@@ -21,7 +21,7 @@
                 <br />
             </div>
             <button class="deleteButton btn btn-outline-primary w-auto h-auto p-3 m-3 align-self-end"
-                data-id={{this.id_prod._id}}>
+                data-id={{this.id_prod._id}} onclick="window.location.href='/api/carts/{{../cart._id}}/product/{{this.id_prod._id}}/delete'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
                     class="bi bi-trash-fill" viewBox="0 0 16 16">
                     <path
@@ -35,12 +35,10 @@
     </ul>
     <div class="d-flex flex-row gap-3 justify-content-end">
         <h3>Total: ${{cartTotal cart}}</h3>
-        <button class="btn btn-outline-primary" onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
-        {{!-- <form action="/api/payments/checkout-session" method="post">
-            <input class="btn btn-outline-primary p-2" type="submit" value="Comprar">
-            <input type="hidden" name="amount" value="{{cartTotal cart}}">
-            <input type="hidden" name="currency" value="usd">
-        </form> --}}
+        <button class="btn btn-outline-primary"
+            onclick="window.location.href='/api/carts/{{cart._id}}/purchase'">Comprar</button>
+
     </div>
 </div>
-{{!-- <script src="https://js.stripe.com/v3/"></script> --}}
+{{!--
+<script src="https://js.stripe.com/v3/"></script> --}}

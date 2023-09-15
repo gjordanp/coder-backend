@@ -12,6 +12,7 @@ import {
     purchaseCart,
     checkout,
     checkoutSession,
+    deleteProductOnCartAndBackToCart
 } from "../controllers/cart.controller.js";
 import authz from "../middlewares/autorization.js";
 import auth from "../middlewares/authentication.js";
@@ -51,6 +52,8 @@ cartRouter.post("/:cid/product/:pid",auth(), authz("user", "premium"),addProduct
 cartRouter.put("/:cid/product/:pid", auth(), updateProductQuantityOnCart);
 
 cartRouter.delete("/:cid/product/:pid", auth(), deleteProductOnCart);
+
+cartRouter.get("/:cid/product/:pid/delete", auth(), deleteProductOnCartAndBackToCart);
 
 cartRouter.get("/checkout", checkout);
 

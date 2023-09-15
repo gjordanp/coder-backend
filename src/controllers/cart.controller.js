@@ -106,6 +106,23 @@ export const deleteProductOnCart = async (req, res) => {
     }
 };
 
+export const deleteProductOnCartAndBackToCart= async (req, res) => {
+    try {
+        const cid = req.params.cid;
+        const pid = req.params.pid;
+        //find cart and delete product
+        const filter = { _id: cid };
+        const update = { $pull: { products: { id_prod: pid } } };
+        const options = { new: true };
+        const updatedCart = await cartService.findOneAndUpdate(filter, update, options);
+        //res.status(200).render('carts', { cart: updatedCart, user: req.session.user });
+        res.status(200).redirect(`/api/carts/${cid}`);
+    } catch (error) {
+        req.logger.error("Error en deleteProductOnCart");
+        res.status(500).send("Error: Cart ID o Product ID no existen\n\n" + error);
+    }
+};
+
 export const deleteCart = async (req, res) => {
     try {
         const cid = req.params.cid;
@@ -159,6 +176,7 @@ export const purchaseCart = async (req, res, next) => {
     const cid = req.params.cid;
     try {
         const cart = await cartService.findByIdAndPopulate(cid, 'products.id_prod');
+        req.session.beforePurchaseCart = cart;
         //console.log(cart);
         const productsWithStock = [];
         const productsWithoutStock = [];
@@ -193,8 +211,6 @@ export const purchaseCart = async (req, res, next) => {
             }
         });
 
-        // console.log(productsWithStock);
-        // console.log(productsWithoutStock);
 
         //Create ticket
         if (productsWithStock.length > 0) {
@@ -205,35 +221,8 @@ export const purchaseCart = async (req, res, next) => {
                 amount: purchaseTotal
             });
             if (productsWithoutStock.length > 0) {
-                // await sendMail(
-                //     req.user.email, 
-                //     `Confirmacion de compra #${newTicket.code}`, 
-                //     "Compra efectuada exitosamente", 
-                //     `<h1>Hemos confirmado tu compra</h1>
-                //     <h3>El total de tu compra es de $${newTicket.amount}</h3>
-                //     <h3>Los productos que compraste son:</h3>
-                //     <ul>
-                //         ${newTicket.products.map(product => `<li>${product.id_prod} - ${product.quantity} unidades</li>`)}
-                //     </ul>
-                //     <h3>Algunos productos no tenian stock suficiente para realizar la compra, por lo que no se agregaron al ticket</h3>
-                //     <h3>Gracias por tu compra</h3>`, 
-                //     null);
-                //res.status(200).json({ message: "Algunos productos no tienen stock suficiente para realizar la compra", ticket: newTicket, productsWithoutStock: productsWithoutStock });
                 req.session.purchase={ message: "Algunos productos no tienen stock suficiente para realizar la compra", ticket: newTicket, productsWithoutStock: productsWithoutStock };
             } else {
-                // await sendMail(
-                //     req.user.email, 
-                //     `Confirmacion de compra #${newTicket.code}`, 
-                //     "Compra efectuada exitosamente", 
-                //     `<h1>Hemos confirmado tu compra</h1>
-                //     <h3>El total de tu compra es de $${newTicket.amount}</h3>
-                //     <h3>Los productos que compraste son:</h3>
-                //     <ul>
-                //         ${newTicket.products.map(product => `<li>${product.id_prod} - ${product.quantity} unidades</li>`)}
-                //     </ul>
-                //     <h3>Gracias por tu compra</h3>`, 
-                //     null);
-                //res.status(200).json({ message: "Compra realizada con exito", ticket: newTicket });
                 req.session.purchase={ message: "", ticket: newTicket };
             }
             next();

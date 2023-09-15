@@ -4,7 +4,7 @@ import productService from './product.service.js';
 
 
 const enviroment = options.mode
-//const domain = enviroment === 'production' ? 'https://flykite.onrender.com' : `http://localhost:${process.env.PORT}`;
+const domain = enviroment === 'production' ? process.env.PRODUCTION_DOMAIN : `http://localhost:${process.env.PORT}`;
 
 
 export default class PaymentService{
@@ -15,8 +15,8 @@ export default class PaymentService{
         const paymentIntent = await this.stripe.paymentIntents.create(data);
         return paymentIntent;
     }
-    createCheckoutSession = async (cart) => {
-        const items = await Promise.all(cart.products.map(async prod => {
+    createCheckoutSession = async (ticket) => {
+        const items = await Promise.all(ticket.products.map(async prod => {
             const product= await productService.findById(prod.id_prod);
             return {
                 price_data: {
@@ -34,9 +34,16 @@ export default class PaymentService{
         const session = await this.stripe.checkout.sessions.create({
             line_items: items,
             mode: 'payment',
-            success_url: `/api/payments/success`,
-            cancel_url: `/api/carts/${cart._id}`,
+            success_url: `${domain}/api/payments/success`,
+            cancel_url: `${domain}/api/payments/cancel`,
         });
         return session;
+    }
+    createCustomer = async (ticket) => {
+        const customer = await this.stripe.customers.create({
+            email: ticket.purchaser.email,
+            id: ticket.code,
+        });
+        return customer;
     }
 }
