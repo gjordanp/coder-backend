@@ -2,6 +2,11 @@
 import userService from '../services/user.service.js';
 import CurrentUserDTO from '../persistencia/DTOs/currentUserDTO.js';
 import sendMail from '../utils/nodemailer.js';
+import { options } from '../utils/commander.js';
+
+
+const enviroment = options.mode
+const domain = enviroment === 'production' ? process.env.PRODUCTION_DOMAIN : `http://localhost:${process.env.PORT}`;
 
 
 
@@ -105,7 +110,7 @@ export const resetPasswordEmail = async (req, res) => {
         const html=`
         <h1>Recuperar Contraseña</h1>
         <p>Para recuperar su contraseña ingrese al siguiente link</p>
-        <a href="http://${req.get('origin')}/api/users/${user._id}/resetpasswordnewpass">Recuperar Contraseña</a>
+        <a href="${domain}/api/users/${user._id}/resetpasswordnewpass">Recuperar Contraseña</a>
         `;
         const sentEmail=await sendMail(req.body.email, "Recuperar Contraseña", "Recupere su contraseña de flykite", html, null); 
 
