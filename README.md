@@ -11,3 +11,11 @@ Iniciar testing:
 
 ## DOCUMENTACION
 http://localhost:8080/apidocs/
+
+## Usuario Premium
+Usuario: adminCoder@coder.com
+Password: adminCoder123
+
+## Deploy
+Render.com
+https://flykite.onrender.com/
