@@ -2,7 +2,7 @@ import { usersMongo } from '../persistencia/DAOs/mongoDao/usersMongo.js';
 import { createHash, validatePassword } from '../utils/bcript.js';
 import { generateUser } from '../utils/faker.js';
 import  sendMail  from '../utils/nodemailer.js'; 
-import { UserDTO } from '../persistencia/DTOs/UserDTO.js'; 
+import { UserDTO } from '../persistencia/DTOs/userDTO.js'; 
 
 
 class UserService {
