@@ -1,6 +1,6 @@
 
 import userService from '../services/user.service.js';
-import { CurrentUserDTO } from '../persistencia/DTOs/UserDTO.js';
+import { CurrentUserDTO } from '../persistencia/DTOs/userDTO.js';
 import sendMail from '../utils/nodemailer.js';
 import { options } from '../utils/commander.js';
 
