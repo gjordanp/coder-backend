@@ -4,15 +4,17 @@
         {{#each users}}
         <div class="card">
             <div class="card-body">
-                <p>Nombre: {{this._doc.first_name}}</p>
-                <p>Apellido: {{this._doc.last_name}}</p>
-                <p>Email: {{this._doc.email}}</p>
-                <p>Rol: {{this._doc.role}}</p>
-                {{#if (neq this._doc.role "admin")}}
-                    <form  method="get" action="/api/users/premium/{{this._doc._id}}">
+                <p>Id: {{this.id}}</p>
+                <p>Nombre: {{this.first_name}}</p>
+                <p>Apellido: {{this.last_name}}</p>
+                <p>Email: {{this.email}}</p>
+                <p>Edad: {{this.age}}</p>
+                <p>Rol: {{this.role}}</p>
+                {{#if (neq this.role "admin")}}
+                    <form  method="get" action="/api/users/premium/{{this.id}}">
                         <input type="submit" class="btn btn-outline-primary mb-2" value="Cambiar rol"/> 
                     </form>
-                    <form  method="get" action="/api/users/delete/{{this._doc._id}}">
+                    <form  method="get" action="/api/users/delete/{{this.id}}">
                         <input type="submit" class="btn btn-outline-primary" value="Borrar"/> 
                     </form>
                 {{/if}}

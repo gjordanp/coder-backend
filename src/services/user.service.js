@@ -1,13 +1,15 @@
 import { usersMongo } from '../persistencia/DAOs/mongoDao/usersMongo.js';
 import { createHash, validatePassword } from '../utils/bcript.js';
 import { generateUser } from '../utils/faker.js';
-import  sendMail  from '../utils/nodemailer.js';
+import  sendMail  from '../utils/nodemailer.js'; 
+import { UserDTO } from '../persistencia/DTOs/UserDTO.js'; 
 
 
 class UserService {
     async findAll() {
         try {
-            return await usersMongo.findAll();
+            const users=await usersMongo.findAll();
+            return users.map(e=>new UserDTO(e));
         } catch (error) {
             return error;
         }
