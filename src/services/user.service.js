@@ -137,7 +137,7 @@ class UserService {
             const users = await usersMongo.findAll();
             //date time = 2 days
             const twoDays= 60*60*24*1000*2;//2 days in milliseconds
-            //const twoDays= 1;//1 milliseconds
+            //const twoDays= 5*60*1000;//5 minutos
             const oldUsers = users.filter(user => user.last_connection < Date.now() - twoDays && user.role != "admin");//find old users and not admin
             oldUsers.forEach(async (user) => {
                 await usersMongo.delete(user._id);//delete old users

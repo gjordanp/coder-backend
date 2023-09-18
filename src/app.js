@@ -54,6 +54,31 @@ app.engine('handlebars', engine(
           total += element.id_prod.price * element.quantity;
         });
         return total;
+      },
+      dateUntilNow: function (date) {
+        //return date difference until now, if date diff is more than 1 day, return days, if less than 1 day, return hours, if less than 1 hour, return minutes, if less than 1 minute, return seconds
+        const dateNow = new Date();
+        const date1 = new Date(date);
+        const diff = dateNow - date1;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor(diff / (1000 * 60));
+        const seconds = Math.floor(diff / (1000));
+        if (days > 0) {
+          return "Hace " + days + " dias";
+        }
+        else if (hours > 0) {
+          return "Hace " + hours + " horas";
+        }
+        else if (minutes > 0) {
+          return "Hace " + minutes + " minutos";
+        }
+        else if (seconds > 0) {
+          return "Hace " + seconds + " segundos";
+        }
+        else {
+          return "Hace 0 segundos";
+        }
       }
     }
   }

@@ -10,7 +10,8 @@ import {
   uploadToMongo,
   deleteUsers,
   editUsers,
-  deleteUser
+  deleteUser,
+  deleteInactiveUsers
 } from "../controllers/user.controller.js";
 import { multerUploader } from "../utils/multer.js";
 import authz from "../middlewares/autorization.js";
@@ -36,6 +37,8 @@ userRouter.get("/premium/:id", changePremiumRole);
 userRouter.post("/:id/documents", multerUploader.single("file"), uploadToMongo);
 
 userRouter.delete("/", deleteUsers);
+
+userRouter.get("/delete/inactive", deleteInactiveUsers);
 
 userRouter.get("/delete/:id", authz("admin"), deleteUser);
 

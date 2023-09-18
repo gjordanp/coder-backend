@@ -35,10 +35,10 @@ export const failregister = async (req, res) => {
 
 export const logout = async (req, res) => {
     if (!req.session) {
-        return res.redirect('/');
+        res.redirect('/');
     }
+    const response = await userService.updateLastConnection(req.session.user._id); //Actualizamos la ultima conexion
     req.session.destroy();
-    const response = await userService.updateLastConnection(req.user._id); //Actualizamos la ultima conexion
     res.redirect('/');
 }
 

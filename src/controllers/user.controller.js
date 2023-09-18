@@ -159,6 +159,16 @@ export const deleteUsers = async (req, res) => {
     }
 }
 
+export const deleteInactiveUsers = async (req, res) => {
+    try {
+        const users = await userService.deleteUsers();
+        res.redirect('/api/users/edit');
+    } catch (error) {
+        req.logger.error("Error en deleteUsers");
+        res.status(500).json({status:'error', payload: error});
+    }
+}
+
 export const editUsers = async (req, res) => {
     try {
         if(!req.session.user) {

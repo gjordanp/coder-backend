@@ -4,6 +4,7 @@ const port = process.env.PORT;
 import CustomError from "../services/errors/CustomError.js";
 import EErrors from "../services/errors/enumError.js";
 import { generateProductErrorInfo } from "../services/errors/infoError.js";
+import sendMail from "../utils/nodemailer.js";
 
 export const seedProducts = async (req, res) => {
   try {
@@ -154,6 +155,9 @@ export const deleteProduct = async (req, res, next) => {
         message: "Error trying to delete a product",
         code: EErrors.INVALID_TYPE_ERROR,
       }); //Lanzo un error
+    }
+    if(product.owner != 'admin'){
+      await sendMail(product.owner, 'Producto eliminado', `Tu producto ${product.title} ha sido eliminado`, `<h1>Tu producto ${product.title} ha sido eliminado</h1>`);
     }
     res.status(200).send(await productService.delete(pid));
   } catch (error) {
